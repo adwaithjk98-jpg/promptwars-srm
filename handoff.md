@@ -23,13 +23,14 @@ Read this together with [CLAUDE.md](CLAUDE.md), which holds the rules. This file
 | App shape: static page + one server function | Keeps the Gemini key on the server; fits almost any AI web app |
 | Gemini via the **Interactions API** | The older `generateContent` call hung with this key; `gemini-2.5-*` is retired for new users |
 | Timeout + fallback model list on every Gemini call | Newest models were overloaded on 26 Oct; the live demo must never hang |
-| Host: **Cloudflare** by default; switch to Firebase only if the problem needs logins/data or a Google tool would clearly help with the jury | Free, no card, generous limits, key stays server-side; not tested on Cloudflare yet |
+| Host: **Cloudflare Workers** (with static assets) by default; switch to Firebase only if the problem needs logins/data or a Google tool would clearly help with the jury | Free, no card, generous limits, key stays server-side. Tested end to end on 26 Oct |
 | Never use the personal Vercel account | It belongs to a separate personal project that must stay apart |
 
 **Open items**
-- [ ] Confirm the leftover Vercel test project was deleted (Adwaith, via dashboard)
-- [ ] Optional tonight: quick Cloudflare deploy test (needs a model/effort check and a go-ahead first)
+- [x] Leftover Vercel test project deleted (Adwaith confirmed)
+- [x] Cloudflare deploy test: page → server → Gemini works publicly
 - [ ] Event morning: re-check which Gemini models respond fast
+- [ ] After the event: delete the test Worker `promptwars-deploytest` (it calls Gemini with the key, so it shouldn't stay up forever)
 - [ ] Event day: problem statement → research → plan → critique → model/effort assessment → build
 
 **Next step:** On event day, Adwaith pastes the problem statement. Start with research and planning, not code.
@@ -37,6 +38,16 @@ Read this together with [CLAUDE.md](CLAUDE.md), which holds the rules. This file
 ---
 
 ## Log (newest first)
+
+### 26 Oct, night: Cloudflare deploy test passed
+- Model/effort check given first (Opus 5.5, high), and Adwaith said go.
+- Pre-flight: Wrangler logged in to one account; confirmed the Worker name `promptwars-deploytest` didn't exist, so nothing was overwritten. Nothing else on the account was touched.
+- Deployed a Worker with static assets: https://promptwars-deploytest.adwaithjk98.workers.dev
+- Gemini key added as a Worker **secret** (piped from `.env`, never printed). Confirmed it's not visible in the public page.
+- Public test: page HTTP 200; `/api/hello` → `gemini-3.1-flash-lite` answered "Gemini is connected." in ~5s.
+- The server code used a 20s timeout per model and the fallback list `gemini-3.1-flash-lite` → `gemini-3.5-flash` → `gemini-flash-lite-latest`. Reuse this pattern in the real build.
+- The test code lives in Claude's temporary scratchpad, not this repo, on purpose (no pre-built app code). The setup is in CLAUDE.md → Deploy.
+- Earlier: Adwaith confirmed the leftover Vercel test project is deleted.
 
 ### 26 Oct, evening: Gemini key tested
 - Key saved to `.env` only, and confirmed absent from every tracked file.

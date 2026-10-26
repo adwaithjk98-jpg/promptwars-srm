@@ -42,8 +42,16 @@ Adwaith, first-year B.Tech ECE student at SRMIST. Beginner at coding. Designs sy
 
 ## Deploy
 - **NEVER deploy to, or log in to, Adwaith's existing personal Vercel account.** It belongs to a separate personal project and must stay completely apart from this hackathon (details in Claude's memory, not here, because this repo is public).
-- Host for this project: **Cloudflare** by default (not yet tested there). Switch to Firebase only if the problem needs logins/data or a Google tool clearly helps. The Cloudflare account may be shared with the personal project: only create new `promptwars-*` resources, and never touch existing ones.
+- Host for this project: **Cloudflare Workers with static assets** by default (tested end to end on 26 Oct). Switch to Firebase only if the problem needs logins/data or a Google tool clearly helps. The Cloudflare account may be shared with the personal project: only create new `promptwars-*` resources, and never touch existing ones.
 - Pattern: static page(s) + a server function. The Gemini key lives **only** in the host's server-side environment variable (`GEMINI_API_KEY`), read by the server function, and never in browser code.
+- Cloudflare setup that worked:
+  - `wrangler.jsonc`: `name` (must start with `promptwars-`), `main: "src/index.js"`, `compatibility_date`, `assets: { directory: "./public", binding: "ASSETS" }`.
+  - `src/index.js` handles `/api/*` and otherwise returns `env.ASSETS.fetch(request)`.
+  - Before deploying: `npx --yes wrangler@latest whoami`, and check the name is free with `wrangler deployments list --name <name>` (it should say "does not exist").
+  - Deploy: `npx --yes wrangler@latest deploy`.
+  - Secret: pipe the value from `.env` into `npx --yes wrangler@latest secret put GEMINI_API_KEY`.
+  - URL format: `https://<name>.adwaithjk98.workers.dev`.
+  - If the login has expired, Adwaith runs `npx wrangler login` in the Antigravity terminal. The approval link times out after about 2 minutes.
 
 ## Gemini API (tested 26 Oct)
 - Key is in `.env` as `GEMINI_API_KEY` (git-ignored). Load it with `set -a; . ./.env; set +a`.
@@ -56,13 +64,12 @@ Adwaith, first-year B.Tech ECE student at SRMIST. Beginner at coding. Designs sy
 - Git + GitHub push pipeline on `main` (history squashed to one clean commit)
 - Deploy pattern proven (page + server function, HTTP 200)
 - Gemini key works (Interactions API, see above)
+- Cloudflare: public page → server function → Gemini works end to end (test Worker `promptwars-deploytest`; delete after the event)
 
 **Broken:**
 - (nothing)
 
 **Left to do:**
-- Confirm the leftover Vercel test project was deleted (Adwaith, via dashboard)
-- Optional: quick Cloudflare deploy test (needs model/effort check + go-ahead)
 - Event morning: re-check which Gemini models respond fast
 - Learn the problem statement (event day)
 - Pick an approach, build, demo, README, submit
