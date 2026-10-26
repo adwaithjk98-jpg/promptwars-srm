@@ -25,6 +25,7 @@ Adwaith, first-year B.Tech ECE student at SRMIST. Beginner at coding. Designs sy
 4. **Commit small and often** so something submittable always exists.
 5. **Log key prompts in `PROMPTS.md`** as we build: the prompt, the tool used, what came out.
 6. **Keep the status list below up to date**: what works, what's broken, what's left.
+6b. **Update [handoff.md](handoff.md) after every plan change and every build**, covering the current state plus a log entry of what happened and changed, and commit it with the change. A step isn't finished until handoff.md is updated.
 7. Confirm with Adwaith before any new outward-facing action (new public repos, new public deployments, submitting).
 
 ## How we work together
@@ -41,20 +42,27 @@ Adwaith, first-year B.Tech ECE student at SRMIST. Beginner at coding. Designs sy
 
 ## Deploy
 - **NEVER deploy to, or log in to, Adwaith's existing personal Vercel account.** It belongs to a separate personal project and must stay completely apart from this hackathon (details in Claude's memory, not here, because this repo is public).
-- Host for this project: to be decided (separate service or separate account). See status below.
+- Host for this project: **Cloudflare** by default (not yet tested there). Switch to Firebase only if the problem needs logins/data or a Google tool clearly helps. The Cloudflare account may be shared with the personal project: only create new `promptwars-*` resources, and never touch existing ones.
 - Pattern: static page(s) + a server function. The Gemini key lives **only** in the host's server-side environment variable (`GEMINI_API_KEY`), read by the server function, and never in browser code.
+
+## Gemini API (tested 26 Oct)
+- Key is in `.env` as `GEMINI_API_KEY` (git-ignored). Load it with `set -a; . ./.env; set +a`.
+- **Use the Interactions API**, not the old `generateContent`: `POST https://generativelanguage.googleapis.com/v1beta/interactions`, header `x-goog-api-key`, body `{"model": "...", "input": "..."}`. Read the text from the `steps` item with `type: "model_output"` → `content[].text`. The old `generateContent` endpoint hung with this key, and `gemini-2.5-*` models are retired for new users.
+- Models that answered on 26 Oct: `gemini-3.1-flash-lite` (~6s), `gemini-flash-lite-latest` (~12s), `gemini-3.5-flash` (~15s). The newest ones (`gemini-3.8-flash`, `3.7`, `3.6`) were overloaded: 503 or hanging. There is no `gemini-3.8-pro`.
+- **Demo safety:** every Gemini call needs a timeout (~20s) and a fallback model list, so the live demo never hangs. Re-check which models are fast on the morning of the event.
 
 ## Status (update as we go)
 **Works:**
-- Git + GitHub push pipeline on `main`
+- Git + GitHub push pipeline on `main` (history squashed to one clean commit)
 - Deploy pattern proven (page + server function, HTTP 200)
+- Gemini key works (Interactions API, see above)
 
 **Broken:**
 - (nothing)
 
 **Left to do:**
-- Delete the leftover Vercel test project (Adwaith, via dashboard)
-- Sign up for a separate deploy host account (Netlify) — pattern already proven, just need the account ready
-- Gemini call through the server function (waiting on the API key)
+- Confirm the leftover Vercel test project was deleted (Adwaith, via dashboard)
+- Optional: quick Cloudflare deploy test (needs model/effort check + go-ahead)
+- Event morning: re-check which Gemini models respond fast
 - Learn the problem statement (event day)
 - Pick an approach, build, demo, README, submit
