@@ -1,78 +1,50 @@
 # Handoff
 
-The living record of where this project stands. It's updated after every change to the plan and every build, so any new session (or a fresh Claude after a usage-limit reset) can pick up exactly where we left off.
+Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). Update this at every commit and every plan change.
 
-Read this together with [CLAUDE.md](CLAUDE.md), which holds the rules. This file holds the story and the current state.
+## Current state — Mon 26 Oct 2026, night (pre-event)
 
----
+**Phase:** Pre-event setup complete. Next: event day, arrival checks, then research (CLAUDE.md §3).
 
-## Current state (last updated: Mon 26 Oct 2026, evening, pre-event)
+**Works**
+- Repo on `main`, pushed; pipeline tested.
+- Gemini key (`.env`) via the Interactions API.
+- Cloudflare: public page → server function → Gemini, end to end (test Worker `promptwars-deploytest`).
 
-**Phase:** Pre-event setup done. Waiting for the problem statement (Tue 27 Oct).
+**Broken:** nothing.
 
-**What exists**
-- Public repo https://github.com/adwaithjk98-jpg/promptwars-srm, `main` only, history squashed to one clean commit.
-- `CLAUDE.md` (rules + context), `PROMPTS.md` (prompt log for submission), `README.md` (placeholder), `.gitignore`, this file.
-- `.env` with `GEMINI_API_KEY`, local only, git-ignored.
-- No app code yet, on purpose: building starts after the problem statement, research, and critique.
-
-**Decisions so far**
+**Decisions**
 | Decision | Why |
 |---|---|
-| Single repo `promptwars-srm`, `main` only | Submission rules: one branch, public, under 10 MB |
-| App shape: static page + one server function | Keeps the Gemini key on the server; fits almost any AI web app |
-| Gemini via the **Interactions API** | The older `generateContent` call hung with this key; `gemini-2.5-*` is retired for new users |
-| Timeout + fallback model list on every Gemini call | Newest models were overloaded on 26 Oct; the live demo must never hang |
-| Host: **Cloudflare Workers** (with static assets) by default; switch to Firebase only if the problem needs logins/data or a Google tool would clearly help with the jury | Free, no card, generous limits, key stays server-side. Tested end to end on 26 Oct |
-| Never use the personal Vercel account | It belongs to a separate personal project that must stay apart |
+| Static page + one server function | Keeps the key server-side; fits almost any AI web app |
+| Gemini Interactions API + timeout + fallback models | `generateContent` hung; newest models overloaded; the demo must never freeze |
+| Cloudflare Workers as default host (Firebase if the problem needs it) | Free, no card, generous limits; tested |
+| No app code before the event | Event fairness; the setup steps are in CLAUDE.md §5 |
+| Lighter process during the build: one approved plan = go-ahead; feature freeze at hour 6; attempt 1 at ~6:30 | Per-task approvals would eat time and tokens |
 
 **Open items**
-- [x] Leftover Vercel test project deleted (Adwaith confirmed)
-- [x] Cloudflare deploy test: page → server → Gemini works publicly
-- [ ] Event morning: re-check which Gemini models respond fast
-- [ ] After the event: delete the test Worker `promptwars-deploytest` (it calls Gemini with the key, so it shouldn't stay up forever)
-- [ ] Event day: problem statement → research → plan → critique → model/effort assessment → build
+- [ ] Arrival: ask organizers about judging criteria, whether a pre-created repo is OK, and whether post-submission commits count
+- [ ] Arrival: re-check fast Gemini models; find Antigravity's built-in agents (plan B)
+- [ ] Research phase: draft the pitch outline alongside the plan
+- [ ] After the event: delete test Worker `promptwars-deploytest` (it calls Gemini with the key)
 
-**Next step:** On event day, Adwaith pastes the problem statement. Start with research and planning, not code.
-
----
+**Next step:** Adwaith pastes the problem statement → research and plan, no code.
 
 ## Log (newest first)
 
-### 26 Oct, night: new habit
-- Every new chat starts by reading this file, then a 2–3 line "where we are" summary. Saved in Claude's memory and at the top of CLAUDE.md.
+### 26 Oct, night: files restructured
+- Each fact now has one home: CLAUDE.md = rules (rewritten by phase of use), handoff.md = state + capped log, Claude's memory = private details only. Memory went from 12 overlapping files to 2, with no rule dropped.
+- Process lightened: an approved plan counts as the go-ahead; feature freeze at hour 6; submission timing set; plan B noted.
 
 ### 26 Oct, night: Cloudflare deploy test passed
-- Model/effort check given first (Opus 5.5, high), and Adwaith said go.
-- Pre-flight: Wrangler logged in to one account; confirmed the Worker name `promptwars-deploytest` didn't exist, so nothing was overwritten. Nothing else on the account was touched.
-- Deployed a Worker with static assets: https://promptwars-deploytest.adwaithjk98.workers.dev
-- Gemini key added as a Worker **secret** (piped from `.env`, never printed). Confirmed it's not visible in the public page.
-- Public test: page HTTP 200; `/api/hello` → `gemini-3.1-flash-lite` answered "Gemini is connected." in ~5s.
-- The server code used a 20s timeout per model and the fallback list `gemini-3.1-flash-lite` → `gemini-3.5-flash` → `gemini-flash-lite-latest`. Reuse this pattern in the real build.
-- The test code lives in Claude's temporary scratchpad, not this repo, on purpose (no pre-built app code). The setup is in CLAUDE.md → Deploy.
-- Earlier: Adwaith confirmed the leftover Vercel test project is deleted.
+- Pre-flight: one account, the Worker name was free, nothing existing touched. Key stored as a Worker secret and confirmed absent from the public page.
+- `/api/hello` → `gemini-3.1-flash-lite` answered in ~5s.
 
 ### 26 Oct, evening: Gemini key tested
-- Key saved to `.env` only, and confirmed absent from every tracked file.
-- The model list works (46 models). `generateContent` hung, and the new Interactions API works.
-- Fast models: `gemini-3.1-flash-lite` (~6s), `gemini-flash-lite-latest` (~12s), `gemini-3.5-flash` (~15s). `gemini-3.8/3.7/3.6-flash` were overloaded (503 or hanging).
-- Recorded in CLAUDE.md so tomorrow's code uses the right call.
+- The Interactions API works. `generateContent` hangs, and `gemini-2.5-*` is retired. The newest models were overloaded, which led to the timeout + fallback rule.
 
-### 26 Oct, evening: host discussion
-- Adwaith asked whether to pick a host before knowing the project. Agreed: we're not choosing architecture, just making sure some public link is possible.
-- Adwaith suggested Cloudflare. Accepted as the default, since it's linked to a personal account but that's fine as long as nothing of the other project is touched.
-
-### 26 Oct, evening: repo history cleaned
-- Adwaith squashed all commits into one and force-pushed `main`, which removed an earlier mention of the personal project and some wrong pronoun wording from public history. Verified: one branch, one commit, history scan clean.
-
-### 26 Oct, evening: deploy test
-- A hello-world page + server function deployed and worked publicly (HTTP 200), which proved the pattern.
-- Mistake: it went into the personal Vercel account. Claude logged the CLI out. Deleting the leftover project is pending (dashboard).
-- Process fix: model/effort check and a pre-flight (which account, what goes public, what's irreversible) before every build or deploy.
-
-### 26 Oct, evening: working agreement
-- Claude acts as architect: push back on rash choices, stop building-before-research, flag overengineering, SDG 8 lens on every decision.
-- Model/effort recommendation before any build, deploy, code, or install task; be generous (Opus 5.5 extra high when unsure).
-
-### 26 Oct, evening: setup
-- CLAUDE.md, README, PROMPTS.md, `.gitignore`, git on `main`, public repo created and pushed, pipeline tested.
+### Earlier (26 Oct)
+- Setup: CLAUDE.md, README, PROMPTS.md, `.gitignore`, public repo, pipeline tested.
+- Working agreement set: architect role, research first, overengineering flags, SDG 8 lens, model/effort checks.
+- Vercel test worked but went into a personal account by mistake. Logged out; Adwaith deleted the project; personal-account rule added.
+- History squashed to one clean commit by Adwaith (removed a personal-project mention and wrong pronouns).
