@@ -39,6 +39,9 @@ Read this together with [CLAUDE.md](CLAUDE.md), which holds the rules. This file
 
 ## Log (newest first)
 
+### 26 Oct, night: new habit
+- Every new chat starts by reading this file, then a 2–3 line "where we are" summary. Saved in Claude's memory and at the top of CLAUDE.md.
+
 ### 26 Oct, night: Cloudflare deploy test passed
 - Model/effort check given first (Opus 5.5, high), and Adwaith said go.
 - Pre-flight: Wrangler logged in to one account; confirmed the Worker name `promptwars-deploytest` didn't exist, so nothing was overwritten. Nothing else on the account was touched.

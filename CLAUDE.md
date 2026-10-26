@@ -1,5 +1,7 @@
 # PromptWars x ACM SRM — Project Context
 
+> **New chat? Read [handoff.md](handoff.md) first, before anything else.** Then tell Adwaith in 2–3 lines where things stand (phase, last thing done, next step) before handling the request.
+
 ## Who I'm working with
 Adwaith, first-year B.Tech ECE student at SRMIST. Beginner at coding. Designs systems and builds with AI. Explain things plainly and do the work yourself where possible.
 
