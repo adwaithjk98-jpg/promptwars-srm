@@ -2,9 +2,9 @@
 
 Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge is in [docs/problem-statement.md](docs/problem-statement.md). Update this at every commit and every plan change.
 
-## Current state — Tue 27 Oct 2026, 10:36 IST (event day)
+## Current state — Tue 27 Oct 2026, 11:07 IST (event day)
 
-**Phase:** Brief received (FairShift). Next: planning on Opus 5.5 at extra high, while Adwaith sets up Google Cloud in parallel.
+**Phase:** Plan proposed, awaiting approval. Google Cloud credits guide received (redeem via the trygcp.dev link in dashboard Quick Links / WhatsApp; link the "Google Cloud Platform Trial Billing Account").
 
 **Deadlines** (unconfirmed, need organizer answers)
 - "Something before 1 pm": Adwaith's notes say "problem statement submission is before 1pm". What exactly is due?
@@ -34,7 +34,16 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 - [ ] Find Antigravity's built-in agents (plan B)
 - [ ] Later: delete the Cloudflare test Worker `promptwars-deploytest` (no longer needed; it holds the key)
 
-**Next step:** Adwaith sets effort to extra high and says go → Claude writes the plan.
+**Proposed plan (11:07, awaiting approval)**
+- **Product:** a work portal. The worker side is mobile-first, read-mostly, one tap per shift. The admin side is desktop-first and configures the org. Two roles only (worker, admin); industry belongs to the organisation and sets presets (pay/overtime rules, fatigue limits, hazard categories, wording).
+- **Industries:** construction site + hospital (contrast: pay/overtime + site hazards vs rotating night shifts + fatigue).
+- **P1 (must, by ~12:05):** persona sign-in with signed-cookie sessions and server-side role checks · one-tap check-in/out → automatic hours, overtime and pay breakdown (payslip) · fatigue alerts · issue/safety reports with an anonymous toggle, anonymous tracking code and status tracking · admin dashboard · unit tests · Cloud Run deploy.
+- **P2 (~12:05–12:40):** Gemini triage of reports (neutral rewrite, category, severity, translation, abuse flag; graceful fallback) · attrition-risk score · Tamil + Hindi strings + read-aloud · accessibility pass · README feature→pain map + 2-industry adoption.
+- **P3 / "what's next":** QR site check-in, voice-recorded reports, skill passport, org join codes, Firestore persistence, phone-OTP login.
+- **Stack:** Node 22 + Express + helmet + express-rate-limit; vanilla HTML/CSS/JS (no build step); `node:test`; Gemini via `fetch`; in-memory repository behind a clean interface (Cloud Run `max-instances=1`); Dockerfile on `$PORT`; secrets via Secret Manager.
+- **Checkpoints:** 11:45 skeleton live on Cloud Run · 12:05 P1 deployed (submittable) · 12:40 P2 · 12:40–12:55 final test, LinkedIn post, attempt 1.
+
+**Next step:** Adwaith approves the plan + model/effort → Claude installs gcloud and scaffolds; Adwaith redeems credits and creates the project in parallel.
 
 ## Log (newest first)
 
