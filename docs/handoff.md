@@ -47,6 +47,10 @@ Current state + a short log. Rules live in [CLAUDE.md](../CLAUDE.md). The challe
 
 ## Log (newest first)
 
+### 27 Oct, 12:56: submissions done
+- Attempt 2 = 94.15 (attempt 1 was 94.45). The latest score counts, so the final is 94.15; rank 16 (was 12 just before resubmitting; 7th at attempt 1 before others submitted). Both attempts used.
+- Remaining clean-up: delete the Cloudflare test Worker `promptwars-deploytest` (holds the Gemini key); keep Cloud Run up for judging.
+
 ### 27 Oct, 12:43: attempt 1 = 94.45 (rank 7/672)
 - Scores: code quality 88, security 99, efficiency 100, testing 99, accessibility 98, problem alignment 93.
 - Improvements pushed (not resubmitted): README requirements checklist + example-feature + rubric mapping; ESLint (recommended) with `npm run lint`, clean; Gemini client tests (43 total).
