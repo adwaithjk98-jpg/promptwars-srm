@@ -47,6 +47,9 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 
 ## Log (newest first)
 
+### 27 Oct, 11:40: Google Cloud timing
+- The credit link is only released at 12:00 (WhatsApp). Plan: gcloud login + project creation now (no credits needed); billing linked at 12:00; deploy right after. The deploy window is roughly 12:05–12:40.
+
 ### 27 Oct, 11:47: deploy script ready
 - `gcloud auth login` done. Added `scripts/deploy-cloud-run.sh` (enables APIs, Gemini key + session secret into Secret Manager, IAM for the runtime account, deploys `fairshift` to asia-south1 with max 1 instance) and `.gcloudignore` (upload list checked: no `.env`). 35/35 tests pass; server on `$PORT` serves pages.
 
