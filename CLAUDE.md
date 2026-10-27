@@ -58,7 +58,7 @@ This file holds **current rules only**. State and history live in [docs/handoff.
 - Every new API route has a server-side role check, is scoped to the session's organisation, and validates its input.
 - No secrets anywhere; new config is documented in `.env.example`.
 - No `console.log` except the startup line, no TODOs, no dead code, full descriptive names.
-- No new dependencies unless clearly needed (currently 3).
+- No new dependencies, **including devDependencies**, unless clearly needed. The evaluator counts the whole lockfile as bloat: adding ESLint (73 → 164 packages) cost Efficiency 100 → 80. Prefer zero-dependency options (`node --test`, `node --check`).
 - README is updated if a feature or pain-point mapping changed.
 
 ## 4. Hard rules
