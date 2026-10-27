@@ -17,5 +17,5 @@ const app = createApp({
 });
 
 app.listen(port, () => {
-  console.log(`FairShift listening on port ${port}`);
+  console.log(`Groundline listening on port ${port}`);
 });

@@ -40,7 +40,7 @@ export function validateReportInput(input, preset) {
 }
 
 export function createTrackingCode() {
-  return `FS-${randomBytes(4).toString('hex').toUpperCase()}`;
+  return `GL-${randomBytes(4).toString('hex').toUpperCase()}`;
 }
 
 /**

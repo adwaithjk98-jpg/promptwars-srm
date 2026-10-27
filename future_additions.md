@@ -1,6 +1,6 @@
 # Future Additions
 
-What FairShift would add after the hackathon prototype, in priority order. Each item names the pain point it addresses.
+What Groundline would add after the hackathon prototype, in priority order. Each item names the pain point it addresses.
 
 1. **Persistent database (Firestore).** The prototype keeps data in memory (one Cloud Run instance, demo data reloaded at startup), so data resets when the server restarts. Swapping the repository layer for Firestore makes records permanent and lets Cloud Run scale to many instances. *Pain point: zero workforce visibility needs reliable records.*
 2. **Real sign-in with phone OTP.** Replace demo persona sign-in with phone-number one-time codes. Most workers have a phone number but not an email. *Pain point: basic smartphones, limited literacy.*

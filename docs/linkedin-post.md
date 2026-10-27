@@ -8,7 +8,7 @@ That was the problem I tackled at **Prompt Wars 2026** (ACM SRMIST × Google for
 
 **The problem:** construction sites, hospitals and factories still run large workforces on paper registers and WhatsApp groups. Workers can't see how their pay is calculated, fear being identified if they report problems, and hazards go unreported until someone gets hurt. Employers only find out who is overworked or about to quit when it's too late.
 
-**What I built: FairShift**, a decent-work platform with two apps:
+**What I built: Groundline**, a decent-work platform with two apps:
 - **Workers:** one tap to check in and out, a payslip that shows every rupee and the rule behind it, fatigue alerts, and safety reporting with an anonymous option and a tracking code. Available in English, Tamil and Hindi, with read-aloud.
 - **Managers:** a dashboard that flags overwork and quit risk (with reasons), and AI-triaged reports. Gemini turns a report in any language into a neutral English summary with a severity level, even when the original is angry.
 

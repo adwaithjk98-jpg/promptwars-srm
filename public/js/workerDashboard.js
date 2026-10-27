@@ -3,8 +3,8 @@ import { createIcon } from './icons.js';
 import { initializeTabs } from './tabs.js';
 import { TRANSLATIONS, translate } from './translations.js';
 
-const LANGUAGE_STORAGE_KEY = 'fairshift-language';
-const TRACKING_CODES_STORAGE_PREFIX = 'fairshift-tracking-codes-';
+const LANGUAGE_STORAGE_KEY = 'groundline-language';
+const TRACKING_CODES_STORAGE_PREFIX = 'groundline-tracking-codes-';
 const MAXIMUM_SAVED_TRACKING_CODES = 10;
 const LIVE_SHIFT_REFRESH_MILLISECONDS = 30_000;
 const MILLISECONDS_PER_HOUR = 3_600_000;

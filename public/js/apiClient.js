@@ -1,4 +1,4 @@
-/** Small wrapper around fetch for the FairShift JSON API. */
+/** Small wrapper around fetch for the Groundline JSON API. */
 export async function requestJson(url, { method = 'GET', body } = {}) {
   const response = await fetch(url, {
     method,

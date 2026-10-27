@@ -1,6 +1,6 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
-export const SESSION_COOKIE_NAME = 'fairshift_session';
+export const SESSION_COOKIE_NAME = 'groundline_session';
 export const SESSION_DURATION_MILLISECONDS = 8 * 60 * 60 * 1000;
 
 /** Uses SESSION_SECRET when provided; otherwise a random per-process secret (sessions end on restart). */

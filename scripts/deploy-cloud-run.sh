@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# Deploys FairShift to Google Cloud Run from source (Cloud Build builds the Dockerfile).
+# Deploys Groundline to Google Cloud Run from source (Cloud Build builds the Dockerfile).
 # Usage: scripts/deploy-cloud-run.sh <project-id>
 # Safe to re-run: existing secrets and settings are kept.
 set -euo pipefail
 
 PROJECT_ID="${1:?Usage: scripts/deploy-cloud-run.sh <project-id>}"
-SERVICE_NAME="fairshift"
+SERVICE_NAME="groundline"
 REGION="asia-south1"
 GEMINI_SECRET_NAME="gemini-api-key"
-SESSION_SECRET_NAME="fairshift-session-secret"
+SESSION_SECRET_NAME="groundline-session-secret"
 
 cd "$(dirname "$0")/.."
 

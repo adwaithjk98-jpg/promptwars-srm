@@ -1,10 +1,10 @@
-# FairShift: Decent Work Platform
+# Groundline: Decent Work Platform
 
 **Fair pay you can see. A voice you can trust. Safer work for everyone.**
 
-FairShift replaces paper registers, spreadsheets and WhatsApp groups for employee-intensive workplaces. Workers see exactly how their pay is calculated and can report problems safely, even anonymously. Employers get an early-warning view of who is overworked, unhappy or likely to quit.
+Groundline replaces paper registers, spreadsheets and WhatsApp groups for employee-intensive workplaces. Workers see exactly how their pay is calculated and can report problems safely, even anonymously. Employers get an early-warning view of who is overworked, unhappy or likely to quit.
 
-Built for **Prompt Wars 2026 (ACM SRMIST)**, challenge **FairShift**, aligned with **UN SDG 8: Decent Work and Economic Growth** (targets 8.5 fair pay, 8.7/8.8 safe and secure working environments and labour rights).
+Built for **Prompt Wars 2026 (ACM SRMIST)**, challenge **FairShift** (Decent Work Platform), aligned with **UN SDG 8: Decent Work and Economic Growth** (targets 8.5 fair pay, 8.7/8.8 safe and secure working environments and labour rights).
 
 - **Live app:** _Cloud Run URL added at deployment_
 - **Problem statement:** [docs/problem-statement.md](docs/problem-statement.md)
@@ -82,7 +82,7 @@ GEMINI_API_KEY=... npm start  # optional key enables AI triage; open http://loca
 ## Deploy (Google Cloud Run)
 
 ```bash
-gcloud run deploy fairshift --source . --region asia-south1 --allow-unauthenticated \
+gcloud run deploy groundline --source . --region asia-south1 --allow-unauthenticated \
   --set-secrets GEMINI_API_KEY=gemini-api-key:latest --max-instances 1
 ```
 

@@ -35,7 +35,7 @@ describe('buildReportRecord', () => {
     assert.equal(report.reporterUserId, null);
     assert.equal(report.submittedAt, null);
     assert.equal(report.submittedDate, '2026-10-20');
-    assert.match(report.trackingCode, /^FS-[0-9A-F]{8}$/);
+    assert.match(report.trackingCode, /^GL-[0-9A-F]{8}$/);
   });
 
   it('keeps the reporter for named reports', () => {
@@ -75,8 +75,8 @@ describe('session tokens', () => {
   });
 
   it('reads a cookie value from a header', () => {
-    assert.equal(readCookie('a=1; fairshift_session=abc.def; b=2', 'fairshift_session'), 'abc.def');
-    assert.equal(readCookie(undefined, 'fairshift_session'), null);
+    assert.equal(readCookie('a=1; groundline_session=abc.def; b=2', 'groundline_session'), 'abc.def');
+    assert.equal(readCookie(undefined, 'groundline_session'), null);
   });
 });
 

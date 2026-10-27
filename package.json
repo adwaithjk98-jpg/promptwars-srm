@@ -1,7 +1,7 @@
 {
-  "name": "fairshift",
+  "name": "groundline",
   "version": "1.0.0",
-  "description": "FairShift: a decent-work platform giving workers transparent pay and a safe voice, and employers clear workforce insight (UN SDG 8).",
+  "description": "Groundline: a decent-work platform giving workers transparent pay and a safe voice, and employers clear workforce insight (UN SDG 8).",
   "type": "module",
   "main": "src/server.js",
   "engines": {

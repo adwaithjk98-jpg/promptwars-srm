@@ -43,7 +43,7 @@ function api(path, cookie, options = {}) {
   });
 }
 
-describe('FairShift API', () => {
+describe('Groundline API', () => {
   it('serves the health check and security headers', async () => {
     const response = await fetch(`${baseUrl}/healthz`);
     assert.equal(response.status, 200);
