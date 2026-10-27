@@ -45,7 +45,8 @@ export function createApp({
   app.use('/api/admin', createAdminRoutes({ repository, getCurrentTime }));
   app.use('/api', (_request, response) => response.status(404).json({ error: 'Not found.' }));
 
-  app.use(express.static(publicDirectory, { extensions: ['html'], maxAge: '1h' }));
+  // maxAge 0 + ETag: browsers revalidate (cheap 304s), so a redeploy never mixes old CSS with new pages.
+  app.use(express.static(publicDirectory, { extensions: ['html'], maxAge: 0 }));
 
   // Final error handler: log the details server-side, never leak them to the client.
   app.use((error, _request, response, _next) => {

@@ -17,6 +17,7 @@ const elements = {
   reportsTabBadge: document.getElementById('reports-tab-badge'),
   statusFilter: document.getElementById('status-filter'),
   showOriginalDefault: document.getElementById('show-original-default'),
+  reportOptions: document.getElementById('report-options'),
   dashboardMessage: document.getElementById('dashboard-message'),
   refreshButton: document.getElementById('refresh-button'),
   signOutButton: document.getElementById('sign-out-button'),
@@ -253,6 +254,18 @@ async function loadDashboard() {
 
 elements.statusFilter.addEventListener('change', renderReports);
 elements.showOriginalDefault.addEventListener('change', saveShowOriginalPreference);
+// Close the ⋯ menu on an outside click or Escape, returning focus to its button.
+document.addEventListener('click', (event) => {
+  if (elements.reportOptions.open && !elements.reportOptions.contains(event.target)) {
+    elements.reportOptions.open = false;
+  }
+});
+elements.reportOptions.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && elements.reportOptions.open) {
+    elements.reportOptions.open = false;
+    elements.reportOptions.querySelector('summary').focus();
+  }
+});
 elements.refreshButton.addEventListener('click', () => loadDashboard().catch(() => {}));
 elements.signOutButton.addEventListener('click', signOut);
 loadDashboard().catch((error) => {

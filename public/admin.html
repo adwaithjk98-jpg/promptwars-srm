@@ -92,21 +92,26 @@
           <p class="section-subtitle">Anonymous reports never store who sent them or when. AI summaries remove names and insults so the issue itself is clear.</p>
         </div>
         <div class="report-controls">
-          <div class="checkbox-row checkbox-row-compact">
-            <input id="show-original-default" type="checkbox" aria-describedby="show-original-hint">
-            <div>
-              <label for="show-original-default">Always show original messages</label>
-              <p id="show-original-hint" class="field-hint">Saved to your account.</p>
-            </div>
-          </div>
-          <div>
-          <label for="status-filter" class="field-label small">Show</label>
+          <label for="status-filter" class="small muted">Show</label>
           <select id="status-filter" class="language-select">
             <option value="unresolved">Unresolved</option>
             <option value="all">All</option>
             <option value="resolved">Resolved</option>
           </select>
-          </div>
+          <details id="report-options" class="options-menu">
+            <summary class="options-menu-button" aria-label="Report display options">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>
+            </summary>
+            <div class="options-menu-panel">
+              <label class="options-menu-item" for="show-original-default">
+                <input id="show-original-default" type="checkbox">
+                <span>
+                  <span class="options-menu-label">Always show original messages</span>
+                  <span class="field-hint">Saved to your account</span>
+                </span>
+              </label>
+            </div>
+          </details>
         </div>
       </div>
       <ul id="report-list" class="item-list"></ul>

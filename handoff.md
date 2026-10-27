@@ -47,6 +47,9 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 
 ## Log (newest first)
 
+### 27 Oct, 12:05: admin reports UI tidy
+- 'Always show original messages' moved into a ⋯ menu (closes on outside click / Escape); show/hide original is now a text link. Static files now revalidate on each load (max-age 0 + ETag), because a 1 h cache was showing stale CSS after changes.
+
 ### 27 Oct, 12:00: critique + improvements
 - Ran the full flow end to end (worker → anonymous Tamil report → Gemini critical → admin acknowledges → tracking code), and it works. Honest gaps for real use: no real login, no org/worker onboarding, in-memory data, no missed-check-out fix, server text (categories, alerts) English-only.
 - Added: 'Other' category; triage judges severity by the problem, not tone; seeded reports carry stored AI summaries; admin show/hide original per report + 'always show' saved per admin (`PATCH /api/admin/preferences`); worker Today: live timer, pay earned so far, 7-day bars; speak-to-type for reports; anonymous tracking codes saved on the phone only. 38 tests pass; headless-Chrome run, no console errors.
