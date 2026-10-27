@@ -47,6 +47,9 @@ Current state + a short log. Rules live in [CLAUDE.md](../CLAUDE.md). The challe
 
 ## Log (newest first)
 
+### 27 Oct, 13:25: project moved into its own folder
+- Locally the repo now lives in `promptwars building/groundline/` so the parent folder can be reused for other events. GitHub repo, Cloud Run service and submission links are unchanged. General lessons from this event are in the parent folder's playbook.
+
 ### 27 Oct, 12:56: submissions done
 - Attempt 2 = 94.15 (attempt 1 was 94.45). The latest score counts, so the final is 94.15; rank 16 (was 12 just before resubmitting; 7th at attempt 1 before others submitted). Both attempts used.
 - Remaining clean-up: delete the Cloudflare test Worker `promptwars-deploytest` (holds the Gemini key); keep Cloud Run up for judging.
