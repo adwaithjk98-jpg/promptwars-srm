@@ -1,6 +1,6 @@
 # Handoff
 
-Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge is in [docs/problem-statement.md](docs/problem-statement.md). Update this at every commit and every plan change.
+Current state + a short log. Rules live in [CLAUDE.md](../CLAUDE.md). The challenge is in [docs/problem-statement.md](problem-statement.md). Update this at every commit and every plan change.
 
 ## Current state — Tue 27 Oct 2026, 11:40 IST (event day)
 

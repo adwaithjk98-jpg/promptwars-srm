@@ -53,7 +53,7 @@ src/
 tests/             Unit and API tests (node:test)
 ```
 
-- **Stateless server:** the data layer is a repository interface; the prototype keeps data in memory, and Firestore is the next step ([future_additions.md](future_additions.md)).
+- **Stateless server:** the data layer is a repository interface; the prototype keeps data in memory, and Firestore is the next step ([docs/future-additions.md](docs/future-additions.md)).
 - **Lightweight:** three runtime dependencies (express, helmet, express-rate-limit). Pages are plain HTML and JavaScript, so they load fast on low-end phones.
 
 ## Security
@@ -88,4 +88,4 @@ gcloud run deploy groundline --source . --region asia-south1 --allow-unauthentic
 
 ## Built with
 
-Claude Code (Claude Opus 5.5) in Antigravity, Gemini API, Node.js, Express, Google Cloud Run. Key prompts are logged in [PROMPTS.md](PROMPTS.md).
+Claude Code (Claude Opus 5.5) in Antigravity, Gemini API, Node.js, Express, Google Cloud Run. Key prompts are logged in [docs/PROMPTS.md](docs/PROMPTS.md).

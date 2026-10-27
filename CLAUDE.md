@@ -1,10 +1,10 @@
 # PromptWars x ACM SRM — Rulebook
 
-> **New chat? Read [handoff.md](handoff.md) first, before anything else.** Then tell Adwaith in 2–3 lines where things stand (phase, last thing done, next step), and say if handoff.md looks stale against `git log`. Then handle the request.
+> **New chat? Read [docs/handoff.md](docs/handoff.md) first, before anything else.** Then tell Adwaith in 2–3 lines where things stand (phase, last thing done, next step), and say if handoff.md looks stale against `git log`. Then handle the request.
 >
 > **Track time.** Run `date` at the start of every reply during the event and state the time, plus the time left to the next deadline once it's known (see handoff.md).
 
-This file holds **current rules only**. State and history live in [handoff.md](handoff.md). The assigned challenge is in [docs/problem-statement.md](docs/problem-statement.md). See §6 for how to keep files clean.
+This file holds **current rules only**. State and history live in [docs/handoff.md](docs/handoff.md). The assigned challenge is in [docs/problem-statement.md](docs/problem-statement.md). See §6 for how to keep files clean.
 
 ## 1. Context
 **Adwaith:** first-year B.Tech ECE at SRMIST, beginner at coding, designs systems and builds with AI.

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { getIndustryPreset } from '../config/industryPresets.js';
 import { SESSION_COOKIE_NAME, SESSION_DURATION_MILLISECONDS, createSessionToken } from '../security/sessionTokens.js';
 
-/** Demo sign-in: pick a persona. Real deployments would use phone OTP (see future_additions.md). */
+/** Demo sign-in: pick a persona. Real deployments would use phone OTP (see docs/future-additions.md). */
 export function createSessionRoutes({ repository, sessionSecret, useSecureCookies }) {
   const router = Router();
 
