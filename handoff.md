@@ -47,6 +47,9 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 
 ## Log (newest first)
 
+### 27 Oct, 12:07: tracking code 'not found' explained
+- Not a bug in the code: the local server was restarted at 12:02, and in-memory reports vanish on restart. On Cloud Run the same would happen when an idle instance shuts down, so the deploy script now sets `--min-instances 1`. Real fix: Firestore (listed in What's next).
+
 ### 27 Oct, 12:05: admin reports UI tidy
 - 'Always show original messages' moved into a ⋯ menu (closes on outside click / Escape); show/hide original is now a text link. Static files now revalidate on each load (max-age 0 + ETag), because a 1 h cache was showing stale CSS after changes.
 

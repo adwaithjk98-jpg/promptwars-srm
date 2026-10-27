@@ -54,13 +54,15 @@ gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:${RUNTIME_SERVICE_ACCOUNT}" \
   --role=roles/run.builder --condition=None --quiet >/dev/null
 
-# max-instances=1: demo data lives in memory, so every request must reach the same instance.
+# Demo data lives in memory: max 1 instance so every request reaches the same data, and min 1 so it
+# isn't shut down when idle (which would wipe reports and tracking codes between visits).
 echo "==> Deploying $SERVICE_NAME to $REGION (first build takes a few minutes)"
 gcloud run deploy "$SERVICE_NAME" \
   --source . \
   --region "$REGION" \
   --allow-unauthenticated \
   --set-secrets "GEMINI_API_KEY=${GEMINI_SECRET_NAME}:latest,SESSION_SECRET=${SESSION_SECRET_NAME}:latest" \
+  --min-instances 1 \
   --max-instances 1 \
   --memory 512Mi \
   --quiet
