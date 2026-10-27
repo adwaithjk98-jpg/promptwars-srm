@@ -1,0 +1,11 @@
+# Files never uploaded to Cloud Build (secrets, dependencies, docs, tests)
+.env
+.env.*
+.git
+.gitignore
+.gcloudignore
+node_modules/
+tests/
+docs/
+scripts/
+*.md

@@ -43,9 +43,12 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 - **Stack:** Node 22 + Express + helmet + express-rate-limit; vanilla HTML/CSS/JS (no build step); `node:test`; Gemini via `fetch`; in-memory repository behind a clean interface (Cloud Run `max-instances=1`); Dockerfile on `$PORT`; secrets via Secret Manager.
 - **Checkpoints (revised 11:40, credits at 12:00):** before 12:00 `gcloud auth login` + one-command deploy script + accessibility pass · 12:00–12:10 redeem credits, project, billing · ~12:20 live on Cloud Run · 12:30 if not live, Render fallback · 12:40–12:55 final test, LinkedIn post, attempt 1.
 
-**Next step:** Adwaith runs `gcloud auth login` now (no project needed). Claude writes the one-command deploy script. At 12:00 Adwaith redeems credits → sends project ID → Claude deploys.
+**Next step:** At 12:00 Adwaith redeems credits, creates the project + billing, sends the project ID → Claude runs `scripts/deploy-cloud-run.sh <project-id>`. (`gcloud` is logged in as Adwaith's account; deploy script ready.)
 
 ## Log (newest first)
+
+### 27 Oct, 11:47: deploy script ready
+- `gcloud auth login` done. Added `scripts/deploy-cloud-run.sh` (enables APIs, Gemini key + session secret into Secret Manager, IAM for the runtime account, deploys `fairshift` to asia-south1 with max 1 instance) and `.gcloudignore` (upload list checked: no `.env`). 35/35 tests pass; server on `$PORT` serves pages.
 
 ### 27 Oct, 11:40: credits delayed to 12:00
 - The credit link comes only from the WhatsApp group at 12:00 (the dashboard Quick Links has none). Moved login and deploy prep before 12:00 so deploy takes one command once the project exists. Fixed the credit-link wording in docs/google-cloud-setup.md.
