@@ -76,7 +76,7 @@ function renderAttention() {
     const listItem = createElement('li', { className: `alert ${item.level === 'high' ? 'alert-high' : ''}` });
     const body = createElement('div');
     body.append(createElement('p', { text: item.title, className: 'item-title' }), createElement('p', { text: item.detail, className: 'small' }));
-    const viewButton = createElement('button', { text: 'View', className: 'button button-secondary button-small', attributes: { type: 'button', style: 'margin-left:auto' } });
+    const viewButton = createElement('button', { text: 'View', className: 'button button-secondary button-small push-end', attributes: { type: 'button' } });
     viewButton.addEventListener('click', () => tabs.selectTabByName(item.tab));
     listItem.append(createIcon('alert'), body, viewButton);
     return listItem;

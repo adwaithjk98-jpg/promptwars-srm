@@ -31,7 +31,7 @@
   </header>
 
   <nav class="tab-bar" aria-label="Sections">
-    <div class="tab-list page-narrow" role="tablist" id="worker-tabs" style="max-width:640px">
+    <div class="tab-list tab-list-narrow" role="tablist" id="worker-tabs">
       <button class="tab" role="tab" type="button" id="tab-today" data-tab="today" aria-controls="panel-today" aria-selected="true">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <span data-text="tabToday">Today</span>
@@ -52,7 +52,7 @@
       <div class="card">
         <h1 class="card-title" data-text="shiftHeading">My shift</h1>
         <button id="shift-button" class="button button-shift" type="button"></button>
-        <p id="shift-status" class="muted" style="margin-top:0.75rem" aria-live="polite"></p>
+        <p id="shift-status" class="muted spaced-top" aria-live="polite"></p>
         <div id="shift-live" class="shift-live" hidden>
           <div class="shift-live-figure">
             <span class="field-label small" data-text="shiftElapsed">Time worked</span>
@@ -76,7 +76,7 @@
         <p class="field-label" data-text="weeklyHoursLabel">Hours worked in the last 7 days</p>
         <div class="meter" aria-hidden="true"><div id="weekly-meter" class="meter-fill"></div></div>
         <p id="weekly-hours" class="muted small"></p>
-        <div id="fatigue-alerts" class="stack" style="margin-top:1rem"></div>
+        <div id="fatigue-alerts" class="stack spaced-top-large"></div>
       </div>
     </section>
 
@@ -84,10 +84,10 @@
       <article class="payslip" aria-labelledby="payslip-title">
         <div class="payslip-header">
           <div>
-            <h1 id="payslip-title" class="card-title" style="margin:0;color:#fff" data-text="payslipTitle">Payslip</h1>
+            <h1 id="payslip-title" class="card-title payslip-title" data-text="payslipTitle">Payslip</h1>
             <p id="pay-period" class="muted small"></p>
           </div>
-          <div style="text-align:right">
+          <div class="align-end">
             <p class="muted small" data-text="totalPay">Total pay</p>
             <p id="pay-total" class="payslip-total"></p>
           </div>
@@ -111,7 +111,7 @@
     <section id="panel-report" class="panel" role="tabpanel" aria-labelledby="tab-report" hidden>
       <div class="card">
         <h1 class="card-title" data-text="reportHeading">Report a problem</h1>
-        <p class="muted" style="margin-bottom:1rem" data-text="reportIntro"></p>
+        <p class="muted spaced-bottom" data-text="reportIntro"></p>
         <form id="report-form" novalidate>
           <div class="field">
             <label for="report-category" data-text="category">What is it about?</label>
@@ -132,7 +132,7 @@
           </div>
           <button type="submit" class="button" data-text="sendReport">Send report</button>
         </form>
-        <div id="report-result" aria-live="polite" style="margin-top:1rem"></div>
+        <div id="report-result" class="spaced-top-large" aria-live="polite"></div>
       </div>
 
       <div class="card">
@@ -149,7 +149,7 @@
           </div>
           <button type="submit" class="button button-secondary" data-text="check">Check</button>
         </form>
-        <div id="track-result" aria-live="polite" style="margin-top:1rem"></div>
+        <div id="track-result" class="spaced-top-large" aria-live="polite"></div>
         <div id="saved-codes" class="saved-codes" hidden>
           <p class="field-label" data-text="savedCodes">Saved on this phone</p>
           <p class="field-hint" data-text="savedCodesHint"></p>

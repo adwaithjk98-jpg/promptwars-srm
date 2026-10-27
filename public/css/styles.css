@@ -390,3 +390,12 @@ textarea { min-height: 120px; resize: vertical; }
 @media (prefers-reduced-motion: no-preference) {
   .meter-fill { transition: width 0.4s ease; }
 }
+
+/* ---------- Spacing and alignment utilities ---------- */
+.spaced-top { margin-top: 0.75rem; }
+.spaced-top-large { margin-top: 1rem; }
+.spaced-bottom { margin-bottom: 1rem; }
+.align-end { text-align: right; }
+.tab-list-narrow { max-width: 640px; }
+.payslip-title { margin: 0; color: #fff; }
+.push-end { margin-left: auto; }

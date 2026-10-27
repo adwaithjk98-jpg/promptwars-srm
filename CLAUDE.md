@@ -49,6 +49,16 @@ This file holds **current rules only**. State and history live in [handoff.md](h
 - **Accessibility:** WCAG AA contrast, full keyboard navigation, visible focus, labels, `lang` attributes, large tap targets, icons + voice for low literacy.
 - **Problem alignment:** the README maps each feature to the pain point it solves and explains the 2-industry adoption.
 
+**Before every commit that touches code, check against the AI evaluator:**
+- `npm test` passes, and new logic has tests (coverage ~95%; `npm run test:coverage`).
+- No inline `style=` or inline scripts. The CSP is strict (`style-src 'self'`, `script-src 'self'`), so use CSS classes. Setting `element.style.x` from JS is fine.
+- User text is rendered only with `textContent`, never `innerHTML`.
+- Every new API route has a server-side role check, is scoped to the session's organisation, and validates its input.
+- No secrets anywhere; new config is documented in `.env.example`.
+- No `console.log` except the startup line, no TODOs, no dead code, full descriptive names.
+- No new dependencies unless clearly needed (currently 3).
+- README is updated if a feature or pain-point mapping changed.
+
 ## 4. Hard rules
 1. **Secrets:** keys only in `.env` (git-ignored) or the host's secret store, never in code, docs, commits, or replies. Check the staged diff before every commit. Adwaith has consented to pasting the Gemini key in chat, so use it without warnings. GitHub login stays with Adwaith (`gh auth login`), with no tokens in chat.
 2. **One branch:** `main` only, ever.

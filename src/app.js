@@ -22,7 +22,11 @@ export function createApp({
   app.disable('x-powered-by');
   app.set('trust proxy', 1);
 
-  app.use(helmet());
+  app.use(helmet({
+    contentSecurityPolicy: {
+      directives: { styleSrc: ["'self'"], scriptSrc: ["'self'"], connectSrc: ["'self'"], formAction: ["'self'"] },
+    },
+  }));
   app.use(express.json({ limit: '10kb' }));
   app.use('/api', rateLimit({ windowMs: 60_000, limit: 120, standardHeaders: 'draft-7', legacyHeaders: false }));
   app.use(createSessionMiddleware(sessionSecret));
