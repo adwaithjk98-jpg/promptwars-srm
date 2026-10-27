@@ -28,6 +28,8 @@ This file holds **current rules only**. State and history live in [docs/handoff.
 
 **Scoring:** an AI evaluator scores out of 100. **Max 2 attempts, and the latest score counts, even if it's lower.** Attempt 1 shows the gaps. Submit attempt 2 only if confident it scores higher.
 
+**Final-attempt rule:** never use the last attempt early. Right before submitting, re-read the closing time shown on the form (deadlines get extended). If time remains, keep improving and submit near the end. AI scores vary by a few tenths between runs, so a rescan of near-identical code is a coin flip.
+
 ## 2. Working agreement
 - **Claude is the architect.** Push back plainly on rash or non-ideal choices: give the reason and one recommended alternative, then let Adwaith decide.
 - **Research before building.** If code is requested before the problem, user, and approach are understood and critiqued, pause and say so.
