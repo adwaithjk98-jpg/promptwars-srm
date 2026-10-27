@@ -39,7 +39,7 @@ export function createApp({
     message: { error: 'Too many reports in a short time. Please wait a few minutes.' },
   });
 
-  app.get('/healthz', (_request, response) => response.json({ status: 'ok' }));
+  app.get('/health', (_request, response) => response.json({ status: 'ok' }));
   app.use('/api', createSessionRoutes({ repository, sessionSecret, useSecureCookies }));
   app.use('/api/worker', createWorkerRoutes({ repository, reportTriageService, reportRateLimiter, getCurrentTime }));
   app.use('/api/admin', createAdminRoutes({ repository, getCurrentTime }));

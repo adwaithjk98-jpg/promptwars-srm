@@ -45,7 +45,7 @@ function api(path, cookie, options = {}) {
 
 describe('Groundline API', () => {
   it('serves the health check and security headers', async () => {
-    const response = await fetch(`${baseUrl}/healthz`);
+    const response = await fetch(`${baseUrl}/health`);
     assert.equal(response.status, 200);
     assert.ok(response.headers.get('content-security-policy'));
     assert.equal(response.headers.get('x-powered-by'), null);

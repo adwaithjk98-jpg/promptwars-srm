@@ -47,6 +47,11 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 
 ## Log (newest first)
 
+### 27 Oct, 12:27: LIVE on Cloud Run
+- Renamed the app to Groundline (the challenge is still FairShift). Live: https://groundline-1029463540920.asia-south1.run.app (service `groundline`, project `fairshift-121859`).
+- The first deploy failed on build-account permissions; granted run.builder, storage.objectViewer, artifactregistry.writer and logging.logWriter, then it worked. The first live Gemini call returned no triage (likely propagation); added warning logs (model + status only) and it works now. `/healthz` is reserved by Cloud Run, so it's now `/health`.
+- LinkedIn post redrafted in plain text with both industries and an outcomes section.
+
 ### 27 Oct, 12:20: deploying
 - Event credits never came (organizers said use Vercel or similar). Rejected Vercel/Cloudflare: the in-memory app needs one long-running server. Adwaith activated Google's own free trial; Claude created project `fairshift-121859`, linked the open trial billing account, and started `scripts/deploy-cloud-run.sh`.
 - Evaluator pass done: strict CSP (no inline styles), `.env.example`, LICENSE, `test:coverage` (94.6% lines). The evaluator checklist is now in CLAUDE.md §3.

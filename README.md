@@ -6,7 +6,7 @@ Groundline replaces paper registers, spreadsheets and WhatsApp groups for employ
 
 Built for **Prompt Wars 2026 (ACM SRMIST)**, challenge **FairShift** (Decent Work Platform), aligned with **UN SDG 8: Decent Work and Economic Growth** (targets 8.5 fair pay, 8.7/8.8 safe and secure working environments and labour rights).
 
-- **Live app:** _Cloud Run URL added at deployment_
+- **Live app:** https://groundline-1029463540920.asia-south1.run.app
 - **Problem statement:** [docs/problem-statement.md](docs/problem-statement.md)
 
 ## Features and the problems they solve

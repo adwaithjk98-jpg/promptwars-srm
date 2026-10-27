@@ -38,14 +38,16 @@ export function createGeminiClient({ apiKey, models = DEFAULT_MODELS, fetchImple
             signal: AbortSignal.timeout(Math.min(PER_MODEL_TIMEOUT_MILLISECONDS, remainingMilliseconds)),
           });
           if (!response.ok) {
+            console.warn(`Gemini model ${model} returned HTTP ${response.status}`);
             continue;
           }
           const text = extractOutputText(await response.json());
           if (text) {
             return text;
           }
-        } catch {
-          // Timeout or network error: fall through to the next model.
+        } catch (error) {
+          // Timeout or network error: log the reason (never the key) and try the next model.
+          console.warn(`Gemini model ${model} failed: ${error.name}`);
         }
       }
       return null;
