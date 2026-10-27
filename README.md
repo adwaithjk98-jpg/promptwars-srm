@@ -9,6 +9,39 @@ Built for **Prompt Wars 2026 (ACM SRMIST)**, challenge **FairShift** (Decent Wor
 - **Live app:** https://groundline-1029463540920.asia-south1.run.app
 - **Problem statement:** [docs/problem-statement.md](docs/problem-statement.md)
 
+## Chosen vertical
+
+**FairShift: Decent Work Platform (UN SDG 8).** Two personas: the **worker** (a construction mason, a hospital nurse or sanitation staff member) and the **manager** (site manager, facilities manager).
+
+## Approach and logic
+
+Groundline is a context-aware assistant: every screen and decision adapts to **who** is using it, **where** they work, **how** they've been working and **what language** they speak.
+
+| Context | Decision it drives |
+|---|---|
+| **Role** (worker / manager) | The server issues a signed session and checks the role on every request: workers get their own pay, hours and reports; managers get only their own organisation's workforce. |
+| **Industry** (construction / hospital) | The organisation's preset sets the overtime threshold and rate, weekly limit, minimum rest, night allowance and the report categories offered. |
+| **Hours worked** | Each completed shift is split into regular and overtime hours; night shifts (starting 20:00–06:00 IST) earn the allowance. Over the last 7 days, the fatigue monitor raises alerts for weekly hours above the limit, rest below the minimum, or shifts longer than 12 hours. |
+| **Risk signals** | The quit-risk score adds points for over-limit hours (35), fatigue alerts (15 each, max 30), heavy overtime (20) and few rest days (15); 30+ is medium, 60+ is high. Every point comes with a plain-language reason. |
+| **Language** | The worker UI and read-aloud follow the worker's language (English, Tamil, Hindi). A report in any language is turned by Gemini into a neutral English summary with a severity judged by the problem, not the tone. |
+| **Anonymity choice** | If the worker chooses anonymous, the reporter ID and exact time are dropped *before* storage; only the date and a tracking code remain. |
+| **AI availability** | Gemini calls have a timeout and a fallback model list; if all fail, the report is still saved, just without the summary. |
+
+## How the solution works
+
+1. **Worker** opens the app on a basic phone, taps **Check in** at the start of a shift and **Check out** at the end.
+2. Pay, overtime, night allowance and fatigue alerts update instantly on the **Today** and **Pay** tabs, in the worker's language, with read-aloud.
+3. If something is wrong, the worker speaks or types a **report**, optionally anonymous, and gets a tracking code to follow its status.
+4. **Manager** sees the **Overview**: totals and a "needs attention" list (high quit risk, fatigue, open reports), then the **Workforce** table and the AI-triaged **Reports** inbox, where they acknowledge and resolve issues.
+
+## Assumptions
+
+- **Pay rules:** an hourly rate per worker; hours beyond 8 in a single shift are overtime at 2× (in line with the double-rate overtime common in Indian labour law). Weekly limit 48 hours; minimum rest 10 hours (construction) and 11 hours (hospital); hospital night allowance ₹150 per shift. These are illustrative presets, not legal advice, and would be set per organisation.
+- **Pay period:** the last 14 days; one check-in equals one shift. Statutory deductions (PF, ESI) aren't modelled yet.
+- **Sign-in:** the demo uses a persona picker in place of phone-number OTP login, which is planned next.
+- **Data:** demo organisations and people are fictional. Data is kept in memory on a single Cloud Run instance and resets on restart; the repository layer is designed to switch to Firestore.
+- **Devices:** workers have a basic smartphone with a modern browser. Read-aloud and speak-to-type depend on the browser's speech support and fail gracefully without it.
+
 ## Challenge requirements checklist
 
 | FairShift requirement | Status | Where |
