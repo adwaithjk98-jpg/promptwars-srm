@@ -1,4 +1,4 @@
-# Groundline: Decent Work Platform
+# Groundline: a FairShift Decent Work Platform
 
 **Fair pay you can see. A voice you can trust. Safer work for everyone.**
 
