@@ -47,6 +47,11 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 
 ## Log (newest first)
 
+### 27 Oct, 12:20: deploying
+- Event credits never came (organizers said use Vercel or similar). Rejected Vercel/Cloudflare: the in-memory app needs one long-running server. Adwaith activated Google's own free trial; Claude created project `fairshift-121859`, linked the open trial billing account, and started `scripts/deploy-cloud-run.sh`.
+- Evaluator pass done: strict CSP (no inline styles), `.env.example`, LICENSE, `test:coverage` (94.6% lines). The evaluator checklist is now in CLAUDE.md §3.
+- Onboarding (org creation, join codes, real login) discussed; only if time allows after deploy, otherwise pitched as next.
+
 ### 27 Oct, 12:07: tracking code 'not found' explained
 - Not a bug in the code: the local server was restarted at 12:02, and in-memory reports vanish on restart. On Cloud Run the same would happen when an idle instance shuts down, so the deploy script now sets `--min-instances 1`. Real fix: Firestore (listed in What's next).
 

@@ -78,7 +78,7 @@ This file holds **current rules only**. State and history live in [handoff.md](h
 - Don't use `generateContent` (it hangs with this key) or `gemini-2.5-*` (retired for new users). There is no `gemini-3.8-pro`.
 - Every call: ~20s timeout + fallback list `gemini-3.1-flash-lite` → `gemini-3.5-flash` → `gemini-flash-lite-latest`.
 
-**Deploy: Google Cloud Run (mandatory final host). Not yet tested.**
+**Deploy: Google Cloud Run (mandatory final host).** Project `fairshift-121859` (Adwaith's own free trial billing; event credits never arrived). Deploy: `scripts/deploy-cloud-run.sh fairshift-121859`.
 - Container: a `Dockerfile` whose server listens on `process.env.PORT` (Cloud Run sets it, default 8080).
 - Deploy from source (Cloud Build builds it, no local Docker needed): `gcloud run deploy <service> --source . --region asia-south1 --allow-unauthenticated`.
 - Key via Secret Manager: create secret `gemini-api-key` from `.env`, deploy with `--set-secrets GEMINI_API_KEY=gemini-api-key:latest`, and grant the runtime service account Secret Accessor.
