@@ -3,25 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FairShift: Fair, Safe, Transparent Work</title>
-  <meta name="description" content="FairShift gives workers transparent pay and a safe voice, and gives employers clear workforce insight.">
+  <title>FairShift | Fair, Safe and Transparent Work</title>
+  <meta name="description" content="FairShift gives workers transparent pay and a safe voice, and gives employers clear insight into workforce health.">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
-  <header class="site-header">
-    <div>
-      <h1>FairShift</h1>
-      <p>Fair pay you can see. A voice you can trust. Safer work for everyone.</p>
+  <header class="app-bar">
+    <div class="app-bar-inner">
+      <a class="brand" href="/" aria-label="FairShift home">
+        <span class="brand-mark" aria-hidden="true">FS</span>
+        <span class="brand-name">FairShift</span>
+      </a>
+      <p class="context-secondary">Decent work platform · UN SDG 8</p>
     </div>
   </header>
-  <main id="main-content">
-    <section class="card" aria-labelledby="intro-heading">
-      <h2 id="intro-heading">Choose who you are</h2>
-      <p class="muted">Demo mode: pick a person to see their view. Workers see their own hours, pay and reports. Managers see their whole workforce.</p>
-    </section>
-    <div id="persona-list" class="persona-grid" aria-live="polite"></div>
-    <p id="sign-in-error" class="error" role="alert" hidden></p>
+
+  <main id="main-content" class="page">
+    <div class="landing">
+      <section aria-labelledby="hero-title">
+        <h1 id="hero-title" class="hero-title">Fair pay you can see.<br>A voice you can trust.</h1>
+        <p class="hero-text">FairShift replaces paper registers and WhatsApp groups for construction sites, hospitals and other large workforces. Workers see exactly how their pay is calculated and can report problems safely. Managers see who is overworked before it becomes a crisis.</p>
+        <ul class="value-list">
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Transparent pay.</strong> One tap to check in; hours, overtime and allowances are calculated automatically.</span>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Safe reporting.</strong> Report hazards or unfair treatment, anonymously if needed, and track what happens next.</span>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Early warnings.</strong> Fatigue alerts and quit-risk signals reach managers before problems escalate.</span>
+          </li>
+          <li>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+            <span><strong>Built for every worker.</strong> English, Tamil and Hindi, with read-aloud for low literacy and basic phones.</span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="card" aria-labelledby="demo-title">
+        <h2 id="demo-title" class="card-title">Sign in to the demo</h2>
+        <p class="muted small" style="margin-bottom:1rem">Choose an account. Workers see their own hours, pay and reports; managers see their whole workforce.</p>
+        <div id="organization-list" aria-live="polite"></div>
+        <p id="sign-in-error" class="error" role="alert" hidden></p>
+      </section>
+    </div>
+    <p class="footer-note">Prototype for Prompt Wars 2026 · Demo data only</p>
   </main>
   <script type="module" src="/js/signIn.js"></script>
 </body>

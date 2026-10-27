@@ -3,82 +3,136 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FairShift: My Work</title>
+  <title>FairShift | My Work</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
-  <header class="site-header">
-    <div>
-      <h1 id="worker-name">FairShift</h1>
-      <p id="worker-organization"></p>
-    </div>
-    <div class="header-actions">
-      <label for="language-select" class="visually-hidden-label" data-text="language" style="margin:0;color:inherit">Language</label>
-      <select id="language-select" aria-describedby="language-help">
-        <option value="en">English</option>
-        <option value="ta">தமிழ்</option>
-        <option value="hi">हिन्दी</option>
-      </select>
-      <span id="language-help" hidden>Changes the language of this page</span>
-      <button id="sign-out-button" class="secondary" type="button" data-text="signOut">Sign out</button>
+  <a class="skip-link" href="#main-content" data-text="skipToContent">Skip to main content</a>
+  <header class="app-bar">
+    <div class="app-bar-inner">
+      <a class="brand" href="/worker" aria-label="FairShift">
+        <span class="brand-mark" aria-hidden="true">FS</span>
+        <span class="brand-name">FairShift</span>
+      </a>
+      <div class="app-bar-context">
+        <div class="context-text">
+          <p id="worker-name" class="context-primary"></p>
+          <p id="worker-organization" class="context-secondary"></p>
+        </div>
+        <label for="language-select" class="visually-hidden" data-text="language">Language</label>
+        <select id="language-select" class="language-select">
+          <option value="en">English</option>
+          <option value="ta">தமிழ்</option>
+          <option value="hi">हिन्दी</option>
+        </select>
+        <button id="sign-out-button" class="button button-secondary button-small" type="button" data-text="signOut">Sign out</button>
+      </div>
     </div>
   </header>
 
-  <main id="main-content" class="worker-layout">
-    <section class="card" aria-labelledby="shift-heading">
-      <h2 id="shift-heading"><span class="icon" aria-hidden="true">🕒</span><span data-text="shiftHeading">My shift</span></h2>
-      <button id="shift-button" class="shift-button" type="button"></button>
-      <p id="shift-status" class="muted" aria-live="polite"></p>
-    </section>
+  <nav class="tab-bar" aria-label="Sections">
+    <div class="tab-list page-narrow" role="tablist" id="worker-tabs" style="max-width:640px">
+      <button class="tab" role="tab" type="button" id="tab-today" data-tab="today" aria-controls="panel-today" aria-selected="true">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span data-text="tabToday">Today</span>
+      </button>
+      <button class="tab" role="tab" type="button" id="tab-pay" data-tab="pay" aria-controls="panel-pay" aria-selected="false">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        <span data-text="tabPay">Pay</span>
+      </button>
+      <button class="tab" role="tab" type="button" id="tab-report" data-tab="report" aria-controls="panel-report" aria-selected="false">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg>
+        <span data-text="tabReport">Report</span>
+      </button>
+    </div>
+  </nav>
 
-    <section class="card" aria-labelledby="pay-heading">
-      <h2 id="pay-heading"><span class="icon" aria-hidden="true">💰</span><span id="pay-heading-text"></span></h2>
-      <p class="muted" data-text="totalPay">Total pay</p>
-      <p id="pay-total" class="pay-total"></p>
-      <button id="read-aloud-button" class="secondary" type="button"><span aria-hidden="true">🔊 </span><span data-text="readAloud">Read aloud</span></button>
-      <div class="table-scroll">
-        <table class="breakdown">
-          <caption class="muted" data-text="howCalculated" style="text-align:left;padding:0.75rem 0 0.25rem">How this is calculated</caption>
-          <tbody id="pay-breakdown"></tbody>
-        </table>
+  <main id="main-content" class="page page-narrow">
+    <section id="panel-today" class="panel" role="tabpanel" aria-labelledby="tab-today">
+      <div class="card">
+        <h1 class="card-title" data-text="shiftHeading">My shift</h1>
+        <button id="shift-button" class="button button-shift" type="button"></button>
+        <p id="shift-status" class="muted" style="margin-top:0.75rem" aria-live="polite"></p>
       </div>
-      <p id="rate-explanation" class="muted"></p>
+      <div class="card">
+        <h2 class="card-title" data-text="fatigueHeading">Rest and safety</h2>
+        <p class="field-label" data-text="weeklyHoursLabel">Hours worked in the last 7 days</p>
+        <div class="meter" aria-hidden="true"><div id="weekly-meter" class="meter-fill"></div></div>
+        <p id="weekly-hours" class="muted small"></p>
+        <div id="fatigue-alerts" class="stack" style="margin-top:1rem"></div>
+      </div>
     </section>
 
-    <section class="card" aria-labelledby="fatigue-heading">
-      <h2 id="fatigue-heading"><span class="icon" aria-hidden="true">🛡️</span><span data-text="fatigueHeading">Rest and safety alerts</span></h2>
-      <p><span data-text="weeklyHoursLabel">Hours worked in the last 7 days</span>: <strong id="weekly-hours"></strong></p>
-      <div id="fatigue-alerts"></div>
-    </section>
-
-    <section class="card" aria-labelledby="report-heading">
-      <h2 id="report-heading"><span class="icon" aria-hidden="true">📣</span><span data-text="reportHeading">Report a problem</span></h2>
-      <p class="muted" data-text="reportIntro"></p>
-      <form id="report-form" novalidate>
-        <label for="report-category" data-text="category">What is it about?</label>
-        <select id="report-category" name="category" required></select>
-        <label for="report-description" data-text="description">What happened?</label>
-        <textarea id="report-description" name="description" minlength="10" maxlength="1000" required></textarea>
-        <div class="toggle-row">
-          <input id="report-anonymous" name="isAnonymous" type="checkbox" checked>
-          <label for="report-anonymous" data-text="anonymous">Send anonymously</label>
+    <section id="panel-pay" class="panel" role="tabpanel" aria-labelledby="tab-pay" hidden>
+      <article class="payslip" aria-labelledby="payslip-title">
+        <div class="payslip-header">
+          <div>
+            <h1 id="payslip-title" class="card-title" style="margin:0;color:#fff" data-text="payslipTitle">Payslip</h1>
+            <p id="pay-period" class="muted small"></p>
+          </div>
+          <div style="text-align:right">
+            <p class="muted small" data-text="totalPay">Total pay</p>
+            <p id="pay-total" class="payslip-total"></p>
+          </div>
         </div>
-        <p style="margin-top:1rem"><button type="submit" data-text="sendReport">Send report</button></p>
-      </form>
-      <div id="report-result" aria-live="polite"></div>
+        <div class="payslip-body">
+          <div class="table-scroll">
+            <table class="data-table">
+              <caption class="muted small" data-text="howCalculated">How this is calculated</caption>
+              <thead>
+                <tr><th scope="col" data-text="item">Item</th><th scope="col" class="numeric" data-text="amount">Amount</th></tr>
+              </thead>
+              <tbody id="pay-breakdown"></tbody>
+            </table>
+          </div>
+          <p id="rate-explanation" class="muted small"></p>
+          <button id="read-aloud-button" class="button button-secondary" type="button"></button>
+        </div>
+      </article>
     </section>
 
-    <section class="card" aria-labelledby="my-reports-heading">
-      <h2 id="my-reports-heading"><span class="icon" aria-hidden="true">📋</span><span data-text="myReports">My reports</span></h2>
-      <ul id="my-reports" class="list"></ul>
-      <h3 data-text="trackHeading" style="margin-top:1.25rem">Check an anonymous report</h3>
-      <form id="track-form">
-        <label for="tracking-code" data-text="trackingCode">Tracking code</label>
-        <input id="tracking-code" name="trackingCode" autocomplete="off" placeholder="FS-XXXXXXXX" maxlength="20" required>
-        <p style="margin-top:0.75rem"><button type="submit" class="secondary" data-text="check">Check</button></p>
-      </form>
-      <div id="track-result" aria-live="polite"></div>
+    <section id="panel-report" class="panel" role="tabpanel" aria-labelledby="tab-report" hidden>
+      <div class="card">
+        <h1 class="card-title" data-text="reportHeading">Report a problem</h1>
+        <p class="muted" style="margin-bottom:1rem" data-text="reportIntro"></p>
+        <form id="report-form" novalidate>
+          <div class="field">
+            <label for="report-category" data-text="category">What is it about?</label>
+            <select id="report-category" name="category" required></select>
+          </div>
+          <div class="field">
+            <label for="report-description" data-text="description">What happened?</label>
+            <textarea id="report-description" name="description" minlength="10" maxlength="1000" required aria-describedby="description-hint"></textarea>
+            <p id="description-hint" class="field-hint" data-text="descriptionHint"></p>
+          </div>
+          <div class="checkbox-row">
+            <input id="report-anonymous" name="isAnonymous" type="checkbox" checked aria-describedby="anonymous-hint">
+            <div>
+              <label for="report-anonymous" data-text="anonymous">Send anonymously</label>
+              <p id="anonymous-hint" class="field-hint" data-text="anonymousHint"></p>
+            </div>
+          </div>
+          <button type="submit" class="button" data-text="sendReport">Send report</button>
+        </form>
+        <div id="report-result" aria-live="polite" style="margin-top:1rem"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title" data-text="myReports">My reports</h2>
+        <ul id="my-reports" class="item-list"></ul>
+      </div>
+
+      <div class="card">
+        <h2 class="card-title" data-text="trackHeading">Check an anonymous report</h2>
+        <form id="track-form">
+          <div class="field">
+            <label for="tracking-code" data-text="trackingCode">Tracking code</label>
+            <input id="tracking-code" name="trackingCode" type="text" autocomplete="off" placeholder="FS-XXXXXXXX" maxlength="20" required>
+          </div>
+          <button type="submit" class="button button-secondary" data-text="check">Check</button>
+        </form>
+        <div id="track-result" aria-live="polite" style="margin-top:1rem"></div>
+      </div>
     </section>
   </main>
   <script type="module" src="/js/workerDashboard.js"></script>

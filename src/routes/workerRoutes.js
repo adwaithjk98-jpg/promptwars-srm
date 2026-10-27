@@ -26,6 +26,7 @@ export function createWorkerRoutes({ repository, reportTriageService, reportRate
         preferredLanguage: worker.preferredLanguage,
       },
       organization: { name: organization.name, industryLabel: preset.industryLabel },
+      rules: { maximumWeeklyHours: preset.maximumWeeklyHours },
       reportCategories: preset.reportCategories,
       activeShift: repository.findActiveShift(worker.userId),
       payslip: summary.payslip,

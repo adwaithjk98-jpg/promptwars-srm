@@ -1,4 +1,6 @@
 import { createElement, formatRupees, requestJson, signOut } from './apiClient.js';
+import { createIcon } from './icons.js';
+import { initializeTabs } from './tabs.js';
 import { TRANSLATIONS, translate } from './translations.js';
 
 const LANGUAGE_STORAGE_KEY = 'fairshift-language';
@@ -9,13 +11,14 @@ const elements = {
   signOutButton: document.getElementById('sign-out-button'),
   shiftButton: document.getElementById('shift-button'),
   shiftStatus: document.getElementById('shift-status'),
-  payHeadingText: document.getElementById('pay-heading-text'),
+  weeklyMeter: document.getElementById('weekly-meter'),
+  weeklyHours: document.getElementById('weekly-hours'),
+  fatigueAlerts: document.getElementById('fatigue-alerts'),
+  payPeriod: document.getElementById('pay-period'),
   payTotal: document.getElementById('pay-total'),
   payBreakdown: document.getElementById('pay-breakdown'),
   rateExplanation: document.getElementById('rate-explanation'),
   readAloudButton: document.getElementById('read-aloud-button'),
-  weeklyHours: document.getElementById('weekly-hours'),
-  fatigueAlerts: document.getElementById('fatigue-alerts'),
   reportForm: document.getElementById('report-form'),
   reportCategory: document.getElementById('report-category'),
   reportDescription: document.getElementById('report-description'),
@@ -62,7 +65,7 @@ function applyStaticText() {
 function renderShift() {
   const activeShift = overview.activeShift;
   elements.shiftButton.replaceChildren(
-    createElement('span', { text: activeShift ? '⏹' : '▶', className: 'icon', attributes: { 'aria-hidden': 'true' } }),
+    createIcon(activeShift ? 'stop' : 'play'),
     createElement('span', { text: activeShift ? text('checkOut') : text('checkIn') }),
   );
   elements.shiftButton.classList.toggle('is-checked-in', Boolean(activeShift));
@@ -71,25 +74,48 @@ function renderShift() {
     : text('notCheckedIn');
 }
 
+function renderFatigue() {
+  const { weeklyHours, alerts } = overview.fatigue;
+  const limit = overview.rules.maximumWeeklyHours;
+  elements.weeklyMeter.style.width = `${Math.min(100, (weeklyHours / limit) * 100)}%`;
+  elements.weeklyMeter.classList.toggle('is-over', weeklyHours > limit);
+  elements.weeklyHours.textContent = text('weeklySummary', { hours: weeklyHours, limit });
+
+  if (alerts.length === 0) {
+    elements.fatigueAlerts.replaceChildren(createElement('p', { text: text('noFatigue'), className: 'notice' }));
+    return;
+  }
+  elements.fatigueAlerts.replaceChildren(...alerts.map((alert) => {
+    const alertElement = createElement('div', { className: alert.severity === 'high' ? 'alert alert-high' : 'alert', attributes: { role: 'note' } });
+    alertElement.append(createIcon('alert'), createElement('span', { text: alert.message }));
+    return alertElement;
+  }));
+}
+
 function renderPay() {
   const payslip = overview.payslip;
-  elements.payHeadingText.textContent = text('payHeading', { days: overview.payPeriodDays });
+  elements.payPeriod.textContent = text('payPeriod', { days: overview.payPeriodDays, shifts: payslip.shiftCount });
   elements.payTotal.textContent = formatRupees(payslip.grossPayInRupees);
 
   const rows = [
-    [`${text('regularWork')} (${payslip.totalRegularHours} ${text('hours')})`, payslip.regularPayInRupees],
-    [`${text('overtime')} (${payslip.totalOvertimeHours} ${text('hours')})`, payslip.overtimePayInRupees],
+    [`${text('regularWork')} · ${payslip.totalRegularHours} ${text('hours')}`, payslip.regularPayInRupees],
+    [`${text('overtime')} · ${payslip.totalOvertimeHours} ${text('hours')}`, payslip.overtimePayInRupees],
   ];
   if (payslip.nightShiftCount > 0) {
-    rows.push([`${text('nightAllowance')} (×${payslip.nightShiftCount})`, payslip.nightAllowanceInRupees]);
+    rows.push([`${text('nightAllowance')} · ×${payslip.nightShiftCount}`, payslip.nightAllowanceInRupees]);
   }
-  rows.push([text('totalPay'), payslip.grossPayInRupees]);
-  elements.payBreakdown.replaceChildren(...rows.map(([label, amount]) => {
+  const bodyRows = rows.map(([label, amount]) => {
     const row = createElement('tr');
     row.append(createElement('th', { text: label, attributes: { scope: 'row' } }));
-    row.append(createElement('td', { text: formatRupees(amount), className: 'amount' }));
+    row.append(createElement('td', { text: formatRupees(amount), className: 'numeric' }));
     return row;
-  }));
+  });
+  const totalRow = createElement('tr', { className: 'payslip-row-total' });
+  totalRow.append(
+    createElement('th', { text: text('totalPay'), attributes: { scope: 'row' } }),
+    createElement('td', { text: formatRupees(payslip.grossPayInRupees), className: 'numeric' }),
+  );
+  elements.payBreakdown.replaceChildren(...bodyRows, totalRow);
 
   elements.rateExplanation.textContent = text('rateExplanation', {
     rate: payslip.hourlyRateInRupees,
@@ -97,22 +123,16 @@ function renderPay() {
     multiplier: payslip.overtimeMultiplier,
     overtimeRate: payslip.overtimeRateInRupees,
   });
-}
-
-function renderFatigue() {
-  elements.weeklyHours.textContent = `${overview.fatigue.weeklyHours} ${text('hours')}`;
-  const alerts = overview.fatigue.alerts;
-  if (alerts.length === 0) {
-    elements.fatigueAlerts.replaceChildren(createElement('p', { text: text('noFatigue'), className: 'notice' }));
-    return;
-  }
-  elements.fatigueAlerts.replaceChildren(...alerts.map((alert) =>
-    createElement('p', { text: `⚠ ${alert.message}`, className: alert.severity === 'high' ? 'alert alert-high' : 'alert' })));
+  elements.readAloudButton.replaceChildren(createIcon('speaker'), createElement('span', { text: text('readAloud') }));
 }
 
 function renderReportCategories() {
+  const selectedCategory = elements.reportCategory.value;
   elements.reportCategory.replaceChildren(...overview.reportCategories.map((category) =>
     createElement('option', { text: category, attributes: { value: category } })));
+  if (selectedCategory) {
+    elements.reportCategory.value = selectedCategory;
+  }
 }
 
 function statusBadge(status) {
@@ -125,20 +145,27 @@ function renderReports() {
     return;
   }
   elements.myReports.replaceChildren(...overview.reports.map((report) => {
-    const item = createElement('li');
-    item.append(createElement('strong', { text: `${report.category} · ${report.submittedDate} ` }), statusBadge(report.status));
-    item.append(createElement('p', { text: report.description, className: 'muted' }));
+    const item = createElement('li', { className: 'item' });
+    const header = createElement('div', { className: 'item-header' });
+    const title = createElement('div');
+    title.append(
+      createElement('p', { text: report.category, className: 'item-title' }),
+      createElement('p', { text: `${report.submittedDate} · ${report.trackingCode}`, className: 'item-meta' }),
+    );
+    header.append(title, statusBadge(report.status));
+    item.append(header, createElement('p', { text: report.description, className: 'muted small' }));
     return item;
   }));
 }
 
 function renderAll() {
   applyStaticText();
-  elements.workerName.textContent = `${overview.worker.displayName}, ${overview.worker.jobTitle}`;
-  elements.workerOrganization.textContent = `${overview.organization.name} · ${overview.organization.industryLabel}`;
+  elements.workerName.textContent = `${overview.worker.displayName} · ${overview.worker.jobTitle}`;
+  elements.workerOrganization.textContent = overview.organization.name;
   renderShift();
-  renderPay();
   renderFatigue();
+  renderPay();
+  renderReportCategories();
   renderReports();
 }
 
@@ -189,10 +216,10 @@ elements.reportForm.addEventListener('submit', async (event) => {
         isAnonymous: elements.reportAnonymous.checked,
       },
     });
-    showMessage(elements.reportResult, text('reportSent', { code: report.trackingCode }));
     elements.reportForm.reset();
     elements.reportAnonymous.checked = true;
     await loadOverview();
+    showMessage(elements.reportResult, text('reportSent', { code: report.trackingCode }));
   } catch (error) {
     showMessage(elements.reportResult, error.message, true);
   } finally {
@@ -208,8 +235,10 @@ elements.trackForm.addEventListener('submit', async (event) => {
   }
   try {
     const result = await requestJson(`/api/worker/reports/track/${encodeURIComponent(trackingCode)}`);
-    const line = createElement('p', { className: 'notice' });
-    line.append(`${result.trackingCode} · ${result.category} · ${result.submittedDate} `, statusBadge(result.status));
+    const line = createElement('div', { className: 'item' });
+    const header = createElement('div', { className: 'item-header' });
+    header.append(createElement('p', { text: `${result.category} · ${result.submittedDate}`, className: 'item-title' }), statusBadge(result.status));
+    line.append(header);
     elements.trackResult.replaceChildren(line);
   } catch (error) {
     showMessage(elements.trackResult, error.message, true);
@@ -224,9 +253,10 @@ elements.languageSelect.addEventListener('change', () => {
 
 elements.readAloudButton.addEventListener('click', readPayAloud);
 elements.signOutButton.addEventListener('click', signOut);
+initializeTabs(document.getElementById('worker-tabs'));
 
 (async function start() {
-  await loadOverview();
+  overview = await requestJson('/api/worker/overview');
   currentLanguage = readSavedLanguage() ?? overview.worker.preferredLanguage ?? 'en';
   if (!TRANSLATIONS[currentLanguage]) {
     currentLanguage = 'en';

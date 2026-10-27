@@ -3,7 +3,7 @@
 Takes about 10 minutes. Use the **same Google account** for every step, and remember which one it is.
 
 ## 1. Redeem the credits
-1. Open the **trygcp.dev** credit link (from the hackathon dashboard's **Quick Links**, or the WhatsApp group).
+1. Open the event's full credit link (starts with `trygcp.dev/` and has an event-specific path; the bare `trygcp.dev` says "no access"). It's shared in the event WhatsApp group, not on the dashboard.
 2. Sign in with your Google account.
 3. Click the button to access your credits.
 4. Check your first and last name, then click **Accept and Continue**.

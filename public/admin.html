@@ -3,41 +3,79 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FairShift: Workforce Dashboard</title>
+  <title>FairShift | Workforce Dashboard</title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
-  <header class="site-header">
-    <div>
-      <h1 id="organization-name">Workforce Dashboard</h1>
-      <p id="admin-details"></p>
-    </div>
-    <div class="header-actions">
-      <button id="refresh-button" class="secondary" type="button">Refresh</button>
-      <button id="sign-out-button" class="secondary" type="button">Sign out</button>
+  <header class="app-bar">
+    <div class="app-bar-inner">
+      <a class="brand" href="/admin" aria-label="FairShift">
+        <span class="brand-mark" aria-hidden="true">FS</span>
+        <span class="brand-name">FairShift</span>
+        <span class="badge badge-neutral">Manager</span>
+      </a>
+      <div class="app-bar-context">
+        <div class="context-text">
+          <p id="organization-name" class="context-primary"></p>
+          <p id="admin-details" class="context-secondary"></p>
+        </div>
+        <button id="refresh-button" class="button button-secondary button-small" type="button">Refresh</button>
+        <button id="sign-out-button" class="button button-secondary button-small" type="button">Sign out</button>
+      </div>
     </div>
   </header>
 
-  <main id="main-content">
-    <section aria-labelledby="totals-heading">
-      <h2 id="totals-heading" class="visually-hidden">Workforce at a glance</h2>
+  <nav class="tab-bar" aria-label="Sections">
+    <div class="tab-list" role="tablist" id="admin-tabs">
+      <button class="tab" role="tab" type="button" id="tab-overview" data-tab="overview" aria-controls="panel-overview" aria-selected="true">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Overview
+      </button>
+      <button class="tab" role="tab" type="button" id="tab-workforce" data-tab="workforce" aria-controls="panel-workforce" aria-selected="false">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Workforce
+      </button>
+      <button class="tab" role="tab" type="button" id="tab-reports" data-tab="reports" aria-controls="panel-reports" aria-selected="false">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        Reports
+        <span id="reports-tab-badge" class="tab-badge" hidden></span>
+      </button>
+    </div>
+  </nav>
+
+  <main id="main-content" class="page">
+    <section id="panel-overview" class="panel" role="tabpanel" aria-labelledby="tab-overview">
+      <div class="section-heading">
+        <div>
+          <h1 class="section-title">Workforce at a glance</h1>
+          <p id="rules-summary" class="section-subtitle"></p>
+        </div>
+      </div>
       <div id="totals" class="stat-grid"></div>
+      <div class="card">
+        <h2 class="card-title">Needs attention</h2>
+        <ul id="attention-list" class="item-list"></ul>
+      </div>
     </section>
 
-    <section class="card" aria-labelledby="workforce-heading">
-      <h2 id="workforce-heading"><span class="icon" aria-hidden="true">👷</span>Workforce health</h2>
-      <p class="muted" id="rules-summary"></p>
-      <div class="table-scroll">
-        <table class="breakdown">
-          <caption class="muted" style="text-align:left;padding-bottom:0.5rem">Hours, overtime, fatigue and quit risk per worker (last 7 and 14 days)</caption>
+    <section id="panel-workforce" class="panel" role="tabpanel" aria-labelledby="tab-workforce" hidden>
+      <div class="section-heading">
+        <div>
+          <h1 class="section-title">Workforce health</h1>
+          <p class="section-subtitle">Hours, overtime, fatigue and quit risk for each worker. Every risk score shows its reasons.</p>
+        </div>
+      </div>
+      <div class="card table-scroll">
+        <table class="data-table">
+          <caption class="visually-hidden">Workforce health by worker</caption>
           <thead>
             <tr>
               <th scope="col">Worker</th>
-              <th scope="col">On shift</th>
-              <th scope="col" class="amount">Hours (7 days)</th>
-              <th scope="col" class="amount">Overtime (14 days)</th>
-              <th scope="col" class="amount">Pay (14 days)</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="numeric">Hours (7 days)</th>
+              <th scope="col" class="numeric">Overtime (14 days)</th>
+              <th scope="col" class="numeric">Pay (14 days)</th>
               <th scope="col">Fatigue alerts</th>
               <th scope="col">Quit risk</th>
             </tr>
@@ -47,10 +85,22 @@
       </div>
     </section>
 
-    <section class="card" aria-labelledby="reports-heading">
-      <h2 id="reports-heading"><span class="icon" aria-hidden="true">📣</span>Reports from workers</h2>
-      <p class="muted">Anonymous reports never store who sent them. AI summaries remove names and insults so the issue is clear.</p>
-      <ul id="report-list" class="list"></ul>
+    <section id="panel-reports" class="panel" role="tabpanel" aria-labelledby="tab-reports" hidden>
+      <div class="section-heading">
+        <div>
+          <h1 class="section-title">Reports from workers</h1>
+          <p class="section-subtitle">Anonymous reports never store who sent them or when. AI summaries remove names and insults so the issue itself is clear.</p>
+        </div>
+        <div>
+          <label for="status-filter" class="field-label small">Show</label>
+          <select id="status-filter" class="language-select">
+            <option value="unresolved">Unresolved</option>
+            <option value="all">All</option>
+            <option value="resolved">Resolved</option>
+          </select>
+        </div>
+      </div>
+      <ul id="report-list" class="item-list"></ul>
       <div id="dashboard-message" aria-live="polite"></div>
     </section>
   </main>

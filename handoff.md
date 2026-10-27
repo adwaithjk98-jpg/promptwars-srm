@@ -47,6 +47,11 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 
 ## Log (newest first)
 
+### 27 Oct, 11:40: UI redesign + README
+- Adwaith asked for an official look with fewer emojis and less clutter. Redesigned: worker app with Today / Pay / Report tabs (mobile-first, document-style payslip), manager app with Overview ("needs attention") / Workforce / Reports tabs, SVG line icons, accessible keyboard tabs. Checked with Playwright screenshots (desktop + mobile + Tamil), no console errors.
+- README rewritten: feature → pain-point map, 2-industry table, architecture, security, accessibility.
+- Staying in auto mode (plan mode would add round trips).
+
 ### 27 Oct, 11:27: core built
 - Built the stack as planned: Express + helmet + rate limit, signed-cookie persona sessions, server-side role checks, pay/overtime/night allowance, fatigue alerts, explainable quit-risk score, anonymous reports (no identity, date only, tracking code), Gemini triage with fallback, worker UI (EN/TA/HI + read-aloud) and admin dashboard. 35 tests pass.
 - Organizers: deploy issues are allowed to fall back to other hosts; decision: stay on Cloud Run, fallback Render at 12:15 if Cloud Run isn't live.
