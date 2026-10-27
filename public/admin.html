@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FairShift: Workforce Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div>
+      <h1 id="organization-name">Workforce Dashboard</h1>
+      <p id="admin-details"></p>
+    </div>
+    <div class="header-actions">
+      <button id="refresh-button" class="secondary" type="button">Refresh</button>
+      <button id="sign-out-button" class="secondary" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section aria-labelledby="totals-heading">
+      <h2 id="totals-heading" class="visually-hidden">Workforce at a glance</h2>
+      <div id="totals" class="stat-grid"></div>
+    </section>
+
+    <section class="card" aria-labelledby="workforce-heading">
+      <h2 id="workforce-heading"><span class="icon" aria-hidden="true">👷</span>Workforce health</h2>
+      <p class="muted" id="rules-summary"></p>
+      <div class="table-scroll">
+        <table class="breakdown">
+          <caption class="muted" style="text-align:left;padding-bottom:0.5rem">Hours, overtime, fatigue and quit risk per worker (last 7 and 14 days)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Worker</th>
+              <th scope="col">On shift</th>
+              <th scope="col" class="amount">Hours (7 days)</th>
+              <th scope="col" class="amount">Overtime (14 days)</th>
+              <th scope="col" class="amount">Pay (14 days)</th>
+              <th scope="col">Fatigue alerts</th>
+              <th scope="col">Quit risk</th>
+            </tr>
+          </thead>
+          <tbody id="workforce-rows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="reports-heading">
+      <h2 id="reports-heading"><span class="icon" aria-hidden="true">📣</span>Reports from workers</h2>
+      <p class="muted">Anonymous reports never store who sent them. AI summaries remove names and insults so the issue is clear.</p>
+      <ul id="report-list" class="list"></ul>
+      <div id="dashboard-message" aria-live="polite"></div>
+    </section>
+  </main>
+  <script type="module" src="/js/adminDashboard.js"></script>
+</body>
+</html>

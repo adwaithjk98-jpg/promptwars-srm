@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FairShift: My Work</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div>
+      <h1 id="worker-name">FairShift</h1>
+      <p id="worker-organization"></p>
+    </div>
+    <div class="header-actions">
+      <label for="language-select" class="visually-hidden-label" data-text="language" style="margin:0;color:inherit">Language</label>
+      <select id="language-select" aria-describedby="language-help">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+      <span id="language-help" hidden>Changes the language of this page</span>
+      <button id="sign-out-button" class="secondary" type="button" data-text="signOut">Sign out</button>
+    </div>
+  </header>
+
+  <main id="main-content" class="worker-layout">
+    <section class="card" aria-labelledby="shift-heading">
+      <h2 id="shift-heading"><span class="icon" aria-hidden="true">🕒</span><span data-text="shiftHeading">My shift</span></h2>
+      <button id="shift-button" class="shift-button" type="button"></button>
+      <p id="shift-status" class="muted" aria-live="polite"></p>
+    </section>
+
+    <section class="card" aria-labelledby="pay-heading">
+      <h2 id="pay-heading"><span class="icon" aria-hidden="true">💰</span><span id="pay-heading-text"></span></h2>
+      <p class="muted" data-text="totalPay">Total pay</p>
+      <p id="pay-total" class="pay-total"></p>
+      <button id="read-aloud-button" class="secondary" type="button"><span aria-hidden="true">🔊 </span><span data-text="readAloud">Read aloud</span></button>
+      <div class="table-scroll">
+        <table class="breakdown">
+          <caption class="muted" data-text="howCalculated" style="text-align:left;padding:0.75rem 0 0.25rem">How this is calculated</caption>
+          <tbody id="pay-breakdown"></tbody>
+        </table>
+      </div>
+      <p id="rate-explanation" class="muted"></p>
+    </section>
+
+    <section class="card" aria-labelledby="fatigue-heading">
+      <h2 id="fatigue-heading"><span class="icon" aria-hidden="true">🛡️</span><span data-text="fatigueHeading">Rest and safety alerts</span></h2>
+      <p><span data-text="weeklyHoursLabel">Hours worked in the last 7 days</span>: <strong id="weekly-hours"></strong></p>
+      <div id="fatigue-alerts"></div>
+    </section>
+
+    <section class="card" aria-labelledby="report-heading">
+      <h2 id="report-heading"><span class="icon" aria-hidden="true">📣</span><span data-text="reportHeading">Report a problem</span></h2>
+      <p class="muted" data-text="reportIntro"></p>
+      <form id="report-form" novalidate>
+        <label for="report-category" data-text="category">What is it about?</label>
+        <select id="report-category" name="category" required></select>
+        <label for="report-description" data-text="description">What happened?</label>
+        <textarea id="report-description" name="description" minlength="10" maxlength="1000" required></textarea>
+        <div class="toggle-row">
+          <input id="report-anonymous" name="isAnonymous" type="checkbox" checked>
+          <label for="report-anonymous" data-text="anonymous">Send anonymously</label>
+        </div>
+        <p style="margin-top:1rem"><button type="submit" data-text="sendReport">Send report</button></p>
+      </form>
+      <div id="report-result" aria-live="polite"></div>
+    </section>
+
+    <section class="card" aria-labelledby="my-reports-heading">
+      <h2 id="my-reports-heading"><span class="icon" aria-hidden="true">📋</span><span data-text="myReports">My reports</span></h2>
+      <ul id="my-reports" class="list"></ul>
+      <h3 data-text="trackHeading" style="margin-top:1.25rem">Check an anonymous report</h3>
+      <form id="track-form">
+        <label for="tracking-code" data-text="trackingCode">Tracking code</label>
+        <input id="tracking-code" name="trackingCode" autocomplete="off" placeholder="FS-XXXXXXXX" maxlength="20" required>
+        <p style="margin-top:0.75rem"><button type="submit" class="secondary" data-text="check">Check</button></p>
+      </form>
+      <div id="track-result" aria-live="polite"></div>
+    </section>
+  </main>
+  <script type="module" src="/js/workerDashboard.js"></script>
+</body>
+</html>
