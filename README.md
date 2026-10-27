@@ -9,6 +9,40 @@ Built for **Prompt Wars 2026 (ACM SRMIST)**, challenge **FairShift** (Decent Wor
 - **Live app:** https://groundline-1029463540920.asia-south1.run.app
 - **Problem statement:** [docs/problem-statement.md](docs/problem-statement.md)
 
+## Challenge requirements checklist
+
+| FairShift requirement | Status | Where |
+|---|---|---|
+| 3 or more working features | 8 working features (table below) | `src/domain/`, `src/routes/` |
+| 2 UIs: workers and employers/admins | Worker app (mobile-first) + manager dashboard (desktop-first) | `public/worker.html`, `public/admin.html` |
+| Works across 2 or more distinct industries | Construction site + hospital, from one engine via presets | `src/config/industryPresets.js` |
+| Regional languages | English, Tamil, Hindi interface; reports accepted in any language | `public/js/translations.js`, `src/services/reportTriage.js` |
+| Limited literacy (voice + visual cues) | Read-aloud payslip, speak-to-type reports, icons with text, one-tap actions | `public/js/workerDashboard.js` |
+| Basic smartphones | No framework, no build step, small pages, 48 px tap targets | `public/` |
+
+### Example features from the brief
+
+| Brief's example feature | In Groundline |
+|---|---|
+| Shift Tracking: check-in with automatic overtime | One-tap check-in/out; overtime calculated per industry rules (`src/domain/payCalculator.js`) |
+| Clear Payslips in the worker's language | Itemised payslip in English/Tamil/Hindi with the rule behind each line, plus read-aloud |
+| Safety Reporting with status tracking | Voice or text reports, tracking code, open → acknowledged → resolved (`src/domain/reportRules.js`) |
+| Honest Feedback: anonymous reviews of managers and conditions | Anonymous toggle stores no identity or exact time; "Manager conduct" and "Working conditions" categories; Gemini keeps it civil |
+| Fatigue Alerts | Weekly-limit, short-rest and long-shift alerts (`src/domain/fatigueMonitor.js`) |
+| Admin Dashboard: attendance, complaints, quit risks | Overview, "needs attention", workforce table, reports inbox, explainable quit-risk score (`src/domain/attritionRisk.js`) |
+| Voice and Local | Tamil/Hindi/English UI, read-aloud, speak-to-type |
+| Skill Passport | Planned next ([docs/future-additions.md](docs/future-additions.md)) |
+
+### Judging rubric
+
+| Criterion | How Groundline addresses it |
+|---|---|
+| Real-world impact | Hazards and overwork reach managers before injury or resignation; pay disputes become verifiable |
+| Relevance to SDG 8 | Targets 8.5 (fair pay), 8.8 (safe working environments, labour rights) |
+| Inclusivity and ease of use | Three languages, voice in and out, icon-led one-tap worker flow |
+| Technical implementation | Server-side role checks, signed sessions, strict CSP, 43 tests, two working interfaces |
+| Feasibility and scalability | Industry presets instead of custom code; stateless server on Cloud Run; Firestore-ready repository layer |
+
 ## Features and the problems they solve
 
 | Feature | Who | Pain point it solves |
@@ -54,6 +88,7 @@ tests/             Unit and API tests (node:test)
 ```
 
 - **Stateless server:** the data layer is a repository interface; the prototype keeps data in memory, and Firestore is the next step ([docs/future-additions.md](docs/future-additions.md)).
+- **Linted** with ESLint (`npm run lint`), **tested** with 43 unit and API tests (`npm test`, `npm run test:coverage`).
 - **Lightweight:** three runtime dependencies (express, helmet, express-rate-limit). Pages are plain HTML and JavaScript, so they load fast on low-end phones.
 
 ## Security
@@ -76,6 +111,7 @@ tests/             Unit and API tests (node:test)
 ```bash
 npm install
 npm test                      # unit + API tests
+npm run lint                  # ESLint (recommended rules)
 GEMINI_API_KEY=... npm start  # optional key enables AI triage; open http://localhost:8080
 ```
 

@@ -12,6 +12,7 @@ const ALLOWED_STATUS_TRANSITIONS = Object.freeze({
 });
 
 // Control characters (except tab/newline) are stripped so stored text is safe to display.
+// eslint-disable-next-line no-control-regex -- matching control characters is the point of this pattern.
 const CONTROL_CHARACTERS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
 /** Validates untrusted report input. Returns { isValid, errors, value }. */

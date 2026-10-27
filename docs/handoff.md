@@ -47,6 +47,11 @@ Current state + a short log. Rules live in [CLAUDE.md](../CLAUDE.md). The challe
 
 ## Log (newest first)
 
+### 27 Oct, 12:43: attempt 1 = 94.45 (rank 7/672)
+- Scores: code quality 88, security 99, efficiency 100, testing 99, accessibility 98, problem alignment 93.
+- Improvements pushed (not resubmitted): README requirements checklist + example-feature + rubric mapping; ESLint (recommended) with `npm run lint`, clean; Gemini client tests (43 total).
+- Decision on attempt 2 is Adwaith's; the latest score overwrites.
+
 ### 27 Oct, 12:27: LIVE on Cloud Run
 - Renamed the app to Groundline (the challenge is still FairShift). Live: https://groundline-1029463540920.asia-south1.run.app (service `groundline`, project `fairshift-121859`).
 - The first deploy failed on build-account permissions; granted run.builder, storage.objectViewer, artifactregistry.writer and logging.logWriter, then it worked. The first live Gemini call returned no triage (likely propagation); added warning logs (model + status only) and it works now. `/healthz` is reserved by Cloud Run, so it's now `/health`.
