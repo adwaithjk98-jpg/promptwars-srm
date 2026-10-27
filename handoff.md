@@ -21,6 +21,7 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). Update this a
 | Cloudflare Workers as default host (Firebase if the problem needs it) | Free, no card, generous limits; tested |
 | No app code before the event | Event fairness; the setup steps are in CLAUDE.md §5 |
 | Lighter process during the build: one approved plan = go-ahead; feature freeze at hour 6; attempt 1 at ~6:30 | Per-task approvals would eat time and tokens |
+| Planning always on Opus 5.5 at extra high | Mistakes cost most there, and planning uses few tokens |
 
 **Open items**
 - [ ] Arrival: ask organizers about judging criteria, whether a pre-created repo is OK, and whether post-submission commits count

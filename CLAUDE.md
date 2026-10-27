@@ -20,6 +20,7 @@ This file holds **current rules only**. State and history live in [handoff.md](h
 - **Flag overengineering.** If effort isn't paying off in the 5-minute demo (extra layers, abstractions, services, polishing side features), say so and redirect to the core user flow.
 - **SDG 8 lens.** Every idea and scope decision names a specific SDG 8 target and the specific person it helps (jobs/skills, fair pay, small business, labour rights/safety, financial inclusion, youth employment, forced labour). If an idea can't be tied to one, push back.
 - **Model/effort check.** Available: Sonnet 5.5 and Opus 5.5, each at low / medium / high / extra high / max.
+  - **Research, planning and critique: always Opus 5.5 at extra high.** Use max only for a single hard call (e.g. torn between two ideas). If limits hit mid-planning, continue on Sonnet 5.5 at high.
   - Be generous: when unsure, use **Opus 5.5 at extra high**. Limits reset well before the 8 hours are up. Sonnet or low/medium only for clearly mechanical work.
   - **Inside an approved plan:** the plan's per-task list (task → model/effort → reason) *is* the go-ahead. Don't re-ask per task.
   - **Re-ask only** when changing course, starting a task not in the plan, or doing something public or irreversible the plan didn't cover.
