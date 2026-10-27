@@ -2,9 +2,9 @@
 
 Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge is in [docs/problem-statement.md](docs/problem-statement.md). Update this at every commit and every plan change.
 
-## Current state — Tue 27 Oct 2026, 11:27 IST (event day)
+## Current state — Tue 27 Oct 2026, 11:40 IST (event day)
 
-**Phase:** Plan approved. P1 core built and tested locally (35/35 tests pass; Gemini triage verified with a Tamil report). Waiting on Google Cloud project + `gcloud auth login` to deploy. **Final deadline: 1:00 pm** (confirmed).
+**Phase:** Plan approved. P1 core built and tested locally (35/35 tests pass; Gemini triage verified with a Tamil report). Waiting on Google Cloud credits: organizers release the trygcp.dev link in the WhatsApp group **at 12:00**. **Final deadline: 1:00 pm** (confirmed).
 
 **Deadlines** (unconfirmed, need organizer answers)
 - "Something before 1 pm": Adwaith's notes say "problem statement submission is before 1pm". What exactly is due?
@@ -15,7 +15,7 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 - App shape proven on Cloudflare (page → server → Gemini). Cloudflare isn't allowed as the final host, but the pattern carries over to Cloud Run.
 
 **Broken / blocked**
-- No Google Cloud setup yet: `gcloud` not installed, no project, no billing/credits. This is the slowest dependency.
+- No Google Cloud project or credits until 12:00 (bare `trygcp.dev` says "no access"; the event link isn't out yet). `gcloud` is installed but not logged in.
 
 **Decisions**
 | Decision | Why |
@@ -41,11 +41,14 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 - **P2 (~12:05–12:40):** Gemini triage of reports (neutral rewrite, category, severity, translation, abuse flag; graceful fallback) · attrition-risk score · Tamil + Hindi strings + read-aloud · accessibility pass · README feature→pain map + 2-industry adoption.
 - **P3 / "what's next":** QR site check-in, voice-recorded reports, skill passport, org join codes, Firestore persistence, phone-OTP login.
 - **Stack:** Node 22 + Express + helmet + express-rate-limit; vanilla HTML/CSS/JS (no build step); `node:test`; Gemini via `fetch`; in-memory repository behind a clean interface (Cloud Run `max-instances=1`); Dockerfile on `$PORT`; secrets via Secret Manager.
-- **Checkpoints:** 11:45 skeleton live on Cloud Run · 12:05 P1 deployed (submittable) · 12:40 P2 · 12:40–12:55 final test, LinkedIn post, attempt 1.
+- **Checkpoints (revised 11:40, credits at 12:00):** before 12:00 `gcloud auth login` + one-command deploy script + accessibility pass · 12:00–12:10 redeem credits, project, billing · ~12:20 live on Cloud Run · 12:30 if not live, Render fallback · 12:40–12:55 final test, LinkedIn post, attempt 1.
 
-**Next step:** Adwaith approves the plan + model/effort → Claude installs gcloud and scaffolds; Adwaith redeems credits and creates the project in parallel.
+**Next step:** Adwaith runs `gcloud auth login` now (no project needed). Claude writes the one-command deploy script. At 12:00 Adwaith redeems credits → sends project ID → Claude deploys.
 
 ## Log (newest first)
+
+### 27 Oct, 11:40: credits delayed to 12:00
+- The credit link comes only from the WhatsApp group at 12:00 (the dashboard Quick Links has none). Moved login and deploy prep before 12:00 so deploy takes one command once the project exists. Fixed the credit-link wording in docs/google-cloud-setup.md.
 
 ### 27 Oct, 11:40: UI redesign + README
 - Adwaith asked for an official look with fewer emojis and less clutter. Redesigned: worker app with Today / Pay / Report tabs (mobile-first, document-style payslip), manager app with Overview ("needs attention") / Workforce / Reports tabs, SVG line icons, accessible keyboard tabs. Checked with Playwright screenshots (desktop + mobile + Tamil), no console errors.
