@@ -10,11 +10,11 @@ export const DEMO_ORGANIZATIONS = [
 ];
 
 export const DEMO_USERS = [
-  { userId: 'admin-meena', organizationId: 'org-construction', role: 'admin', displayName: 'Meena Raghavan', jobTitle: 'Site Manager', hourlyRateInRupees: 0, preferredLanguage: 'en' },
+  { userId: 'admin-meena', organizationId: 'org-construction', role: 'admin', displayName: 'Meena Raghavan', jobTitle: 'Site Manager', hourlyRateInRupees: 0, preferredLanguage: 'en', preferences: { showOriginalReportText: false } },
   { userId: 'worker-ravi', organizationId: 'org-construction', role: 'worker', displayName: 'Ravi Kumar', jobTitle: 'Mason', hourlyRateInRupees: 95, preferredLanguage: 'hi' },
   { userId: 'worker-selvi', organizationId: 'org-construction', role: 'worker', displayName: 'Selvi Murugan', jobTitle: 'Helper', hourlyRateInRupees: 70, preferredLanguage: 'ta' },
   { userId: 'worker-arjun', organizationId: 'org-construction', role: 'worker', displayName: 'Arjun Das', jobTitle: 'Steel Fixer', hourlyRateInRupees: 90, preferredLanguage: 'hi' },
-  { userId: 'admin-farah', organizationId: 'org-hospital', role: 'admin', displayName: 'Farah Ali', jobTitle: 'Facilities Manager', hourlyRateInRupees: 0, preferredLanguage: 'en' },
+  { userId: 'admin-farah', organizationId: 'org-hospital', role: 'admin', displayName: 'Farah Ali', jobTitle: 'Facilities Manager', hourlyRateInRupees: 0, preferredLanguage: 'en', preferences: { showOriginalReportText: false } },
   { userId: 'worker-priya', organizationId: 'org-hospital', role: 'worker', displayName: 'Priya Sharma', jobTitle: 'Staff Nurse', hourlyRateInRupees: 120, preferredLanguage: 'hi' },
   { userId: 'worker-lakshmi', organizationId: 'org-hospital', role: 'worker', displayName: 'Lakshmi Narayanan', jobTitle: 'Sanitation Staff', hourlyRateInRupees: 75, preferredLanguage: 'ta' },
   { userId: 'worker-joseph', organizationId: 'org-hospital', role: 'worker', displayName: 'Joseph Mathew', jobTitle: 'Ward Attendant', hourlyRateInRupees: 80, preferredLanguage: 'en' },
@@ -77,17 +77,20 @@ export function generateDemoReports(referenceTime) {
     {
       reportId: 'demo-report-1', trackingCode: 'FS-DEMO0001', organizationId: 'org-construction',
       category: 'Scaffolding or structure', description: 'Guard rails are missing on the level 3 scaffolding near the lift shaft.',
-      isAnonymous: true, reporterUserId: null, submittedDate: dateOnly(daysAgo(2)), submittedAt: null, status: 'open', triage: null,
+      isAnonymous: true, reporterUserId: null, submittedDate: dateOnly(daysAgo(2)), submittedAt: null, status: 'open',
+      triage: { neutralSummary: 'Guard rails are missing on the level 3 scaffolding near the lift shaft, creating a fall risk.', severity: 'high', containsAbusiveLanguage: false },
     },
     {
       reportId: 'demo-report-2', trackingCode: 'FS-DEMO0002', organizationId: 'org-construction',
       category: 'Pay issue', description: 'Overtime from last Saturday is not shown in my hours.',
-      isAnonymous: false, reporterUserId: 'worker-arjun', submittedDate: dateOnly(daysAgo(1)), submittedAt: daysAgo(1).toISOString(), status: 'acknowledged', triage: null,
+      isAnonymous: false, reporterUserId: 'worker-arjun', submittedDate: dateOnly(daysAgo(1)), submittedAt: daysAgo(1).toISOString(), status: 'acknowledged',
+      triage: { neutralSummary: 'Overtime worked last Saturday is missing from the recorded hours.', severity: 'medium', containsAbusiveLanguage: false },
     },
     {
       reportId: 'demo-report-3', trackingCode: 'FS-DEMO0003', organizationId: 'org-hospital',
       category: 'Needle-stick injury', description: 'The sharps bin in Ward B is overflowing and nobody has replaced it for two days.',
-      isAnonymous: true, reporterUserId: null, submittedDate: dateOnly(daysAgo(1)), submittedAt: null, status: 'open', triage: null,
+      isAnonymous: true, reporterUserId: null, submittedDate: dateOnly(daysAgo(1)), submittedAt: null, status: 'open',
+      triage: { neutralSummary: 'The sharps bin in Ward B is overflowing and has not been replaced for two days, risking needle-stick injuries.', severity: 'high', containsAbusiveLanguage: false },
     },
   ];
 }

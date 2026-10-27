@@ -123,4 +123,23 @@ describe('FairShift API', () => {
     assert.ok(ravi.fatigueAlerts.length > 0);
     assert.notEqual(ravi.attritionRisk.level, 'low');
   });
+
+  it('saves an admin\'s "always show original text" preference and validates it', async () => {
+    const adminCookie = await signIn('admin-meena');
+    const invalid = await api('/api/admin/preferences', adminCookie, { method: 'PATCH', body: JSON.stringify({ showOriginalReportText: 'yes' }) });
+    assert.equal(invalid.status, 400);
+    const saved = await api('/api/admin/preferences', adminCookie, { method: 'PATCH', body: JSON.stringify({ showOriginalReportText: true }) });
+    assert.equal(saved.status, 200);
+    const dashboard = await (await api('/api/admin/overview', adminCookie)).json();
+    assert.equal(dashboard.admin.preferences.showOriginalReportText, true);
+  });
+
+  it('accepts reports in the "Other" category', async () => {
+    const workerCookie = await signIn('worker-selvi');
+    const response = await api('/api/worker/reports', workerCookie, {
+      method: 'POST',
+      body: JSON.stringify({ category: 'Other', description: 'Drinking water tank is empty since morning.', isAnonymous: true }),
+    });
+    assert.equal(response.status, 201);
+  });
 });

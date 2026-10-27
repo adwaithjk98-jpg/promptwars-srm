@@ -21,6 +21,11 @@ export function createInMemoryRepository({ referenceTime = new Date() } = {}) {
     findUserById: (userId) => users.find((user) => user.userId === userId) ?? null,
     findOrganizationById: (organizationId) =>
       organizations.find((organization) => organization.organizationId === organizationId) ?? null,
+    updateUserPreferences(userId, changes) {
+      const user = users.find((candidate) => candidate.userId === userId);
+      user.preferences = { ...user.preferences, ...changes };
+      return { ...user.preferences };
+    },
     listWorkersByOrganization: (organizationId) =>
       users.filter((user) => user.organizationId === organizationId && user.role === 'worker'),
 

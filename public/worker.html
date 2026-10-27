@@ -53,9 +53,26 @@
         <h1 class="card-title" data-text="shiftHeading">My shift</h1>
         <button id="shift-button" class="button button-shift" type="button"></button>
         <p id="shift-status" class="muted" style="margin-top:0.75rem" aria-live="polite"></p>
+        <div id="shift-live" class="shift-live" hidden>
+          <div class="shift-live-figure">
+            <span class="field-label small" data-text="shiftElapsed">Time worked</span>
+            <span id="shift-elapsed" class="shift-live-value"></span>
+          </div>
+          <div class="shift-live-figure">
+            <span class="field-label small" data-text="shiftEarned">Earned this shift</span>
+            <span id="shift-earned" class="shift-live-value"></span>
+          </div>
+          <p id="shift-overtime-note" class="small shift-live-note"></p>
+        </div>
       </div>
       <div class="card">
         <h2 class="card-title" data-text="fatigueHeading">Rest and safety</h2>
+        <p class="field-label" data-text="lastSevenDays">Last 7 days</p>
+        <ol id="day-bars" class="day-bars"></ol>
+        <p class="day-bars-legend small muted" aria-hidden="true">
+          <span class="legend-swatch"></span><span data-text="regularWork">Regular work</span>
+          <span class="legend-swatch legend-swatch-overtime"></span><span data-text="overtime">Overtime</span>
+        </p>
         <p class="field-label" data-text="weeklyHoursLabel">Hours worked in the last 7 days</p>
         <div class="meter" aria-hidden="true"><div id="weekly-meter" class="meter-fill"></div></div>
         <p id="weekly-hours" class="muted small"></p>
@@ -104,6 +121,7 @@
             <label for="report-description" data-text="description">What happened?</label>
             <textarea id="report-description" name="description" minlength="10" maxlength="1000" required aria-describedby="description-hint"></textarea>
             <p id="description-hint" class="field-hint" data-text="descriptionHint"></p>
+            <button id="dictate-button" class="button button-secondary button-small dictate-button" type="button" aria-pressed="false" hidden></button>
           </div>
           <div class="checkbox-row">
             <input id="report-anonymous" name="isAnonymous" type="checkbox" checked aria-describedby="anonymous-hint">
@@ -132,6 +150,11 @@
           <button type="submit" class="button button-secondary" data-text="check">Check</button>
         </form>
         <div id="track-result" aria-live="polite" style="margin-top:1rem"></div>
+        <div id="saved-codes" class="saved-codes" hidden>
+          <p class="field-label" data-text="savedCodes">Saved on this phone</p>
+          <p class="field-hint" data-text="savedCodesHint"></p>
+          <ul id="saved-code-list" class="saved-code-list"></ul>
+        </div>
       </div>
     </section>
   </main>

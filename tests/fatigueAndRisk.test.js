@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import { getIndustryPreset } from '../src/config/industryPresets.js';
 import { calculateAttritionRisk } from '../src/domain/attritionRisk.js';
-import { detectFatigueAlerts } from '../src/domain/fatigueMonitor.js';
+import { detectFatigueAlerts, summarizeDailyHours } from '../src/domain/fatigueMonitor.js';
 
 const construction = getIndustryPreset('construction');
 const hospital = getIndustryPreset('hospital');
@@ -53,5 +53,19 @@ describe('calculateAttritionRisk', () => {
     assert.equal(risk.level, 'high');
     assert.equal(risk.score, 100);
     assert.equal(risk.reasons.length, 4);
+  });
+});
+
+describe('summarizeDailyHours', () => {
+  it('returns 7 days, oldest first, with hours on the right India date', () => {
+    const days = summarizeDailyHours({
+      shifts: [shift('2026-10-26T02:30:00Z', 10), shift('2026-10-24T02:30:00Z', 8), { checkInTime: '2026-10-27T02:30:00Z', checkOutTime: null }],
+      referenceTime: '2026-10-27T06:00:00Z',
+    });
+    assert.equal(days.length, 7);
+    assert.equal(days[6].workDate, '2026-10-27');
+    assert.equal(days[6].workedHours, 0);
+    assert.equal(days[5].workedHours, 10);
+    assert.equal(days[3].workedHours, 8);
   });
 });

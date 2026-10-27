@@ -16,12 +16,15 @@ const elements = {
   reportList: document.getElementById('report-list'),
   reportsTabBadge: document.getElementById('reports-tab-badge'),
   statusFilter: document.getElementById('status-filter'),
+  showOriginalDefault: document.getElementById('show-original-default'),
   dashboardMessage: document.getElementById('dashboard-message'),
   refreshButton: document.getElementById('refresh-button'),
   signOutButton: document.getElementById('sign-out-button'),
 };
 
 let dashboard = null;
+// Reports whose original text the admin has flipped away from their saved default.
+const reportsWithOriginalToggled = new Set();
 const tabs = initializeTabs(document.getElementById('admin-tabs'));
 
 function badge(label, level) {
@@ -158,7 +161,7 @@ function renderReports() {
       if (report.triage.containsAbusiveLanguage) {
         item.append(createElement('p', { text: 'The original wording contained abusive language. The summary above is neutral.', className: 'small muted' }));
       }
-      item.append(createElement('p', { text: `Original: ${report.description}`, className: 'small muted' }));
+      item.append(...createOriginalTextToggle(report));
     } else {
       item.append(createElement('p', { text: report.description }));
     }
@@ -180,6 +183,51 @@ function renderReports() {
   }));
 }
 
+function isOriginalTextVisible(reportId) {
+  const showByDefault = dashboard.admin.preferences?.showOriginalReportText === true;
+  return reportsWithOriginalToggled.has(reportId) ? !showByDefault : showByDefault;
+}
+
+/** A show/hide button for the worker's original words, next to the AI summary. */
+function createOriginalTextToggle(report) {
+  const originalTextId = `original-${report.reportId}`;
+  const isVisible = isOriginalTextVisible(report.reportId);
+  const toggleButton = createElement('button', {
+    text: isVisible ? 'Hide original message' : 'Show original message',
+    className: 'button-link small',
+    attributes: { type: 'button', 'aria-expanded': String(isVisible), 'aria-controls': originalTextId },
+  });
+  const originalText = createElement('p', {
+    text: `Original: ${report.description}`,
+    className: 'small muted original-text',
+    attributes: { id: originalTextId },
+  });
+  originalText.hidden = !isVisible;
+  toggleButton.addEventListener('click', () => {
+    if (reportsWithOriginalToggled.has(report.reportId)) {
+      reportsWithOriginalToggled.delete(report.reportId);
+    } else {
+      reportsWithOriginalToggled.add(report.reportId);
+    }
+    renderReports();
+    document.querySelector(`[aria-controls="${originalTextId}"]`)?.focus();
+  });
+  return [toggleButton, originalText];
+}
+
+async function saveShowOriginalPreference() {
+  const showOriginalReportText = elements.showOriginalDefault.checked;
+  try {
+    const { preferences } = await requestJson('/api/admin/preferences', { method: 'PATCH', body: { showOriginalReportText } });
+    dashboard.admin.preferences = preferences;
+    reportsWithOriginalToggled.clear();
+    renderReports();
+  } catch (error) {
+    elements.showOriginalDefault.checked = !showOriginalReportText;
+    elements.dashboardMessage.replaceChildren(createElement('p', { text: error.message, className: 'error' }));
+  }
+}
+
 async function updateStatus(reportId, status) {
   try {
     await requestJson(`/api/admin/reports/${encodeURIComponent(reportId)}`, { method: 'PATCH', body: { status } });
@@ -196,6 +244,7 @@ async function loadDashboard() {
   elements.adminDetails.textContent = `${dashboard.admin.displayName} · ${dashboard.admin.jobTitle}`;
   const rules = dashboard.rules;
   elements.rulesSummary.textContent = `${dashboard.organization.industryLabel} rules: overtime after ${rules.standardHoursPerShift} hours per shift at ${rules.overtimeMultiplier}×, weekly limit ${rules.maximumWeeklyHours} hours, at least ${rules.minimumRestHoursBetweenShifts} hours rest between shifts${rules.nightShiftAllowanceInRupees ? `, night allowance ${formatRupees(rules.nightShiftAllowanceInRupees)} per shift` : ''}.`;
+  elements.showOriginalDefault.checked = dashboard.admin.preferences?.showOriginalReportText === true;
   renderTotals(dashboard.totals);
   renderAttention();
   renderWorkforce();
@@ -203,6 +252,7 @@ async function loadDashboard() {
 }
 
 elements.statusFilter.addEventListener('change', renderReports);
+elements.showOriginalDefault.addEventListener('change', saveShowOriginalPreference);
 elements.refreshButton.addEventListener('click', () => loadDashboard().catch(() => {}));
 elements.signOutButton.addEventListener('click', signOut);
 loadDashboard().catch((error) => {

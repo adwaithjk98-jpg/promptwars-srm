@@ -31,7 +31,7 @@ export function createAdminRoutes({ repository, getCurrentTime }) {
     const summary = buildAdminSummary({ organization, workers, shiftsByWorkerId, reports, referenceTime: getCurrentTime() });
 
     response.json({
-      admin: { displayName: admin.displayName, jobTitle: admin.jobTitle },
+      admin: { displayName: admin.displayName, jobTitle: admin.jobTitle, preferences: admin.preferences },
       organization: { name: organization.name, industryLabel: preset.industryLabel },
       rules: {
         standardHoursPerShift: preset.standardHoursPerShift,
@@ -58,6 +58,15 @@ export function createAdminRoutes({ repository, getCurrentTime }) {
     }
     const updatedReport = repository.updateReport(report.reportId, { status: nextStatus });
     return response.json({ report: toAdminReportView(updatedReport) });
+  });
+
+  router.patch('/preferences', (request, response) => {
+    const showOriginalReportText = request.body?.showOriginalReportText;
+    if (typeof showOriginalReportText !== 'boolean') {
+      return response.status(400).json({ error: 'showOriginalReportText must be true or false.' });
+    }
+    const preferences = repository.updateUserPreferences(request.session.userId, { showOriginalReportText });
+    return response.json({ preferences });
   });
 
   return router;

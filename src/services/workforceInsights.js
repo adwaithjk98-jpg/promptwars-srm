@@ -1,6 +1,6 @@
 import { getIndustryPreset } from '../config/industryPresets.js';
 import { calculateAttritionRisk } from '../domain/attritionRisk.js';
-import { detectFatigueAlerts } from '../domain/fatigueMonitor.js';
+import { detectFatigueAlerts, summarizeDailyHours } from '../domain/fatigueMonitor.js';
 import { calculatePayslip } from '../domain/payCalculator.js';
 import { MILLISECONDS_PER_HOUR } from '../domain/timeUtilities.js';
 
@@ -24,7 +24,8 @@ export function buildWorkerSummary({ worker, organization, shifts, referenceTime
     overtimeHoursLastFortnight: payslip.totalOvertimeHours,
     daysWorkedLastFortnight: payslip.shiftCount,
   });
-  return { payslip, fatigue, attritionRisk, payPeriodDays: PAY_PERIOD_DAYS };
+  const dailyHours = summarizeDailyHours({ shifts, referenceTime });
+  return { payslip, fatigue, attritionRisk, dailyHours, payPeriodDays: PAY_PERIOD_DAYS };
 }
 
 /** Organisation-wide view for admins: who is overworked, at risk, or on shift now. */

@@ -3,7 +3,7 @@
  * An organisation picks a preset; pay, fatigue and reporting rules follow from it.
  */
 
-const COMMON_REPORT_CATEGORIES = ['Pay issue', 'Working conditions', 'Manager conduct'];
+const COMMON_REPORT_CATEGORIES = ['Pay issue', 'Working conditions', 'Manager conduct', 'Other'];
 
 export const INDUSTRY_PRESETS = Object.freeze({
   construction: Object.freeze({

@@ -21,17 +21,23 @@ export function createWorkerRoutes({ repository, reportTriageService, reportRate
     const summary = buildWorkerSummary({ worker, organization, shifts, referenceTime: getCurrentTime() });
     response.json({
       worker: {
+        userId: worker.userId,
         displayName: worker.displayName,
         jobTitle: worker.jobTitle,
         preferredLanguage: worker.preferredLanguage,
       },
       organization: { name: organization.name, industryLabel: preset.industryLabel },
-      rules: { maximumWeeklyHours: preset.maximumWeeklyHours },
+      rules: {
+        maximumWeeklyHours: preset.maximumWeeklyHours,
+        standardHoursPerShift: preset.standardHoursPerShift,
+        maximumSingleShiftHours: preset.maximumSingleShiftHours,
+      },
       reportCategories: preset.reportCategories,
       activeShift: repository.findActiveShift(worker.userId),
       payslip: summary.payslip,
       payPeriodDays: summary.payPeriodDays,
       fatigue: summary.fatigue,
+      dailyHours: summary.dailyHours,
       reports: repository.listReportsByReporter(worker.userId).map(toWorkerReportView),
     });
   });

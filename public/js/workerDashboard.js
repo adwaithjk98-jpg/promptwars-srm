@@ -4,6 +4,10 @@ import { initializeTabs } from './tabs.js';
 import { TRANSLATIONS, translate } from './translations.js';
 
 const LANGUAGE_STORAGE_KEY = 'fairshift-language';
+const TRACKING_CODES_STORAGE_PREFIX = 'fairshift-tracking-codes-';
+const MAXIMUM_SAVED_TRACKING_CODES = 10;
+const LIVE_SHIFT_REFRESH_MILLISECONDS = 30_000;
+const MILLISECONDS_PER_HOUR = 3_600_000;
 const elements = {
   workerName: document.getElementById('worker-name'),
   workerOrganization: document.getElementById('worker-organization'),
@@ -11,6 +15,14 @@ const elements = {
   signOutButton: document.getElementById('sign-out-button'),
   shiftButton: document.getElementById('shift-button'),
   shiftStatus: document.getElementById('shift-status'),
+  shiftLive: document.getElementById('shift-live'),
+  shiftElapsed: document.getElementById('shift-elapsed'),
+  shiftEarned: document.getElementById('shift-earned'),
+  shiftOvertimeNote: document.getElementById('shift-overtime-note'),
+  dayBars: document.getElementById('day-bars'),
+  dictateButton: document.getElementById('dictate-button'),
+  savedCodes: document.getElementById('saved-codes'),
+  savedCodeList: document.getElementById('saved-code-list'),
   weeklyMeter: document.getElementById('weekly-meter'),
   weeklyHours: document.getElementById('weekly-hours'),
   fatigueAlerts: document.getElementById('fatigue-alerts'),
@@ -32,6 +44,8 @@ const elements = {
 
 let currentLanguage = 'en';
 let overview = null;
+let liveShiftTimer = null;
+let activeSpeechRecognition = null;
 
 const text = (key, values) => translate(currentLanguage, key, values);
 
@@ -48,6 +62,29 @@ function saveLanguage(languageCode) {
     localStorage.setItem(LANGUAGE_STORAGE_KEY, languageCode);
   } catch {
     // Storage may be unavailable (private mode); the choice simply isn't remembered.
+  }
+}
+
+// Tracking codes live only in this browser, keyed per worker, so the server never links a code to a person.
+function trackingCodesStorageKey() {
+  return `${TRACKING_CODES_STORAGE_PREFIX}${overview.worker.userId}`;
+}
+
+function readSavedTrackingCodes() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(trackingCodesStorageKey()) ?? '[]');
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveTrackingCode({ trackingCode, category, submittedDate }) {
+  const savedCodes = [{ trackingCode, category, submittedDate }, ...readSavedTrackingCodes()].slice(0, MAXIMUM_SAVED_TRACKING_CODES);
+  try {
+    localStorage.setItem(trackingCodesStorageKey(), JSON.stringify(savedCodes));
+  } catch {
+    // Storage unavailable: the worker still sees the code on screen.
   }
 }
 
@@ -72,6 +109,57 @@ function renderShift() {
   elements.shiftStatus.textContent = activeShift
     ? `${text('checkedInSince')}: ${new Date(activeShift.checkInTime).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}`
     : text('notCheckedIn');
+}
+
+function formatDuration(totalHours) {
+  const totalMinutes = Math.floor(totalHours * 60);
+  return text('hoursMinutes', { hours: Math.floor(totalMinutes / 60), minutes: totalMinutes % 60 });
+}
+
+/** Running time and an estimate of pay for the shift in progress, using the same rule as the payslip. */
+function renderLiveShift() {
+  const activeShift = overview.activeShift;
+  elements.shiftLive.hidden = !activeShift;
+  if (!activeShift) {
+    return;
+  }
+  const { hourlyRateInRupees, overtimeRateInRupees, standardHoursPerShift, overtimeMultiplier } = overview.payslip;
+  const workedHours = Math.max(0, (Date.now() - new Date(activeShift.checkInTime).getTime()) / MILLISECONDS_PER_HOUR);
+  const regularHours = Math.min(workedHours, standardHoursPerShift);
+  const overtimeHours = Math.max(0, workedHours - standardHoursPerShift);
+  elements.shiftElapsed.textContent = formatDuration(workedHours);
+  elements.shiftEarned.textContent = formatRupees(Math.floor(regularHours * hourlyRateInRupees + overtimeHours * overtimeRateInRupees));
+  const isInOvertime = overtimeHours > 0;
+  elements.shiftOvertimeNote.textContent = isInOvertime
+    ? text('inOvertime', { multiplier: overtimeMultiplier })
+    : text('overtimeStartsAfter', { hours: standardHoursPerShift });
+  elements.shiftOvertimeNote.classList.toggle('is-overtime', isInOvertime);
+}
+
+function restartLiveShiftTimer() {
+  clearInterval(liveShiftTimer);
+  liveShiftTimer = overview.activeShift ? setInterval(renderLiveShift, LIVE_SHIFT_REFRESH_MILLISECONDS) : null;
+}
+
+/** One bar per day: height shows hours, colour shows overtime, so it reads without reading. */
+function renderDayBars() {
+  const { standardHoursPerShift, maximumSingleShiftHours } = overview.rules;
+  const weekdayFormatter = new Intl.DateTimeFormat(`${currentLanguage}-IN`, { weekday: 'short', timeZone: 'Asia/Kolkata' });
+  elements.dayBars.replaceChildren(...overview.dailyHours.map(({ workDate, workedHours }) => {
+    const dayName = weekdayFormatter.format(new Date(`${workDate}T12:00:00+05:30`));
+    const roundedHours = Math.round(workedHours * 10) / 10;
+    const bar = createElement('li', { className: 'day-bar', attributes: { 'aria-label': text('dayHours', { day: dayName, hours: roundedHours }) } });
+    const column = createElement('span', { className: 'day-bar-column', attributes: { 'aria-hidden': 'true' } });
+    const fill = createElement('span', { className: workedHours > standardHoursPerShift ? 'day-bar-fill is-overtime' : 'day-bar-fill' });
+    fill.style.height = `${Math.min(100, (workedHours / maximumSingleShiftHours) * 100)}%`;
+    column.append(fill);
+    bar.append(
+      createElement('span', { text: workedHours > 0 ? String(roundedHours) : '–', className: 'day-bar-value', attributes: { 'aria-hidden': 'true' } }),
+      column,
+      createElement('span', { text: dayName, className: 'day-bar-label', attributes: { 'aria-hidden': 'true' } }),
+    );
+    return bar;
+  }));
 }
 
 function renderFatigue() {
@@ -158,20 +246,78 @@ function renderReports() {
   }));
 }
 
+function renderSavedTrackingCodes() {
+  const savedCodes = readSavedTrackingCodes();
+  elements.savedCodes.hidden = savedCodes.length === 0;
+  elements.savedCodeList.replaceChildren(...savedCodes.map((savedCode) => {
+    const item = createElement('li');
+    const button = createElement('button', {
+      text: `${savedCode.trackingCode} · ${savedCode.category} · ${savedCode.submittedDate}`,
+      className: 'button button-secondary button-small saved-code-button',
+      attributes: { type: 'button' },
+    });
+    button.addEventListener('click', () => checkTrackingCode(savedCode.trackingCode));
+    item.append(button);
+    return item;
+  }));
+}
+
 function renderAll() {
   applyStaticText();
   elements.workerName.textContent = `${overview.worker.displayName} · ${overview.worker.jobTitle}`;
   elements.workerOrganization.textContent = overview.organization.name;
   renderShift();
+  renderLiveShift();
+  renderDayBars();
   renderFatigue();
   renderPay();
   renderReportCategories();
   renderReports();
+  renderSavedTrackingCodes();
+  renderDictateButton();
 }
 
 async function loadOverview() {
   overview = await requestJson('/api/worker/overview');
   renderAll();
+  restartLiveShiftTimer();
+}
+
+const SpeechRecognition = window.SpeechRecognition ?? window.webkitSpeechRecognition;
+
+function renderDictateButton() {
+  elements.dictateButton.hidden = !SpeechRecognition;
+  const isListening = Boolean(activeSpeechRecognition);
+  elements.dictateButton.setAttribute('aria-pressed', String(isListening));
+  elements.dictateButton.classList.toggle('is-listening', isListening);
+  elements.dictateButton.replaceChildren(createIcon('microphone'), createElement('span', { text: text(isListening ? 'listening' : 'speak') }));
+}
+
+/** Speak-to-type in the chosen language, for workers who find typing hard. Audio is handled by the browser. */
+function toggleDictation() {
+  if (activeSpeechRecognition) {
+    activeSpeechRecognition.stop();
+    return;
+  }
+  const recognition = new SpeechRecognition();
+  recognition.lang = TRANSLATIONS[currentLanguage].speechLanguage;
+  recognition.interimResults = false;
+  recognition.addEventListener('result', (event) => {
+    const spokenText = Array.from(event.results).map((result) => result[0].transcript).join(' ').trim();
+    const existingText = elements.reportDescription.value.trim();
+    elements.reportDescription.value = existingText ? `${existingText} ${spokenText}` : spokenText;
+  });
+  recognition.addEventListener('end', () => {
+    activeSpeechRecognition = null;
+    renderDictateButton();
+    elements.reportDescription.focus();
+  });
+  recognition.addEventListener('error', (event) => {
+    showMessage(elements.reportResult, event.error, true);
+  });
+  activeSpeechRecognition = recognition;
+  renderDictateButton();
+  recognition.start();
 }
 
 function readPayAloud() {
@@ -216,6 +362,9 @@ elements.reportForm.addEventListener('submit', async (event) => {
         isAnonymous: elements.reportAnonymous.checked,
       },
     });
+    if (report.isAnonymous) {
+      saveTrackingCode(report);
+    }
     elements.reportForm.reset();
     elements.reportAnonymous.checked = true;
     await loadOverview();
@@ -227,12 +376,8 @@ elements.reportForm.addEventListener('submit', async (event) => {
   }
 });
 
-elements.trackForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const trackingCode = elements.trackingCode.value.trim();
-  if (!trackingCode) {
-    return;
-  }
+async function checkTrackingCode(trackingCode) {
+  elements.trackingCode.value = trackingCode;
   try {
     const result = await requestJson(`/api/worker/reports/track/${encodeURIComponent(trackingCode)}`);
     const line = createElement('div', { className: 'item' });
@@ -243,6 +388,14 @@ elements.trackForm.addEventListener('submit', async (event) => {
   } catch (error) {
     showMessage(elements.trackResult, error.message, true);
   }
+}
+
+elements.trackForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const trackingCode = elements.trackingCode.value.trim();
+  if (trackingCode) {
+    checkTrackingCode(trackingCode);
+  }
 });
 
 elements.languageSelect.addEventListener('change', () => {
@@ -252,6 +405,7 @@ elements.languageSelect.addEventListener('change', () => {
 });
 
 elements.readAloudButton.addEventListener('click', readPayAloud);
+elements.dictateButton.addEventListener('click', toggleDictation);
 elements.signOutButton.addEventListener('click', signOut);
 initializeTabs(document.getElementById('worker-tabs'));
 
@@ -263,4 +417,5 @@ initializeTabs(document.getElementById('worker-tabs'));
   }
   elements.languageSelect.value = currentLanguage;
   renderAll();
+  restartLiveShiftTimer();
 })().catch((error) => showMessage(elements.reportResult, error.message, true));

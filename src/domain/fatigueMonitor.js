@@ -2,6 +2,24 @@ import { isCompletedShift } from './payCalculator.js';
 import { MILLISECONDS_PER_HOUR, getIndiaDateString, hoursBetween, roundToTwoDecimals } from './timeUtilities.js';
 
 const FATIGUE_WINDOW_DAYS = 7;
+const DAY_IN_MILLISECONDS = 24 * MILLISECONDS_PER_HOUR;
+
+/** Hours worked on each of the last 7 calendar days (India time), oldest first, for a simple bar chart. */
+export function summarizeDailyHours({ shifts, referenceTime, dayCount = FATIGUE_WINDOW_DAYS }) {
+  const referenceMilliseconds = new Date(referenceTime).getTime();
+  const days = Array.from({ length: dayCount }, (_unused, index) => ({
+    workDate: getIndiaDateString(referenceMilliseconds - (dayCount - 1 - index) * DAY_IN_MILLISECONDS),
+    workedHours: 0,
+  }));
+  const dayByDate = new Map(days.map((day) => [day.workDate, day]));
+  for (const shift of shifts.filter(isCompletedShift)) {
+    const day = dayByDate.get(getIndiaDateString(shift.checkInTime));
+    if (day) {
+      day.workedHours = roundToTwoDecimals(day.workedHours + hoursBetween(shift.checkInTime, shift.checkOutTime));
+    }
+  }
+  return days;
+}
 
 /**
  * Flags overwork early: too many hours this week, too little rest between shifts,

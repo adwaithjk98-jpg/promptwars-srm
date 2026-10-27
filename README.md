@@ -13,12 +13,12 @@ Built for **Prompt Wars 2026 (ACM SRMIST)**, challenge **FairShift**, aligned wi
 
 | Feature | Who | Pain point it solves |
 |---|---|---|
-| **One-tap check-in / check-out** with automatic hours and overtime | Worker | Overtime hours not counted; manual registers |
+| **One-tap check-in / check-out** with a live timer, pay earned so far this shift and a 7-day hours chart (overtime days in amber) | Worker | Overtime hours not counted; manual registers |
 | **Clear payslip:** regular pay, overtime at 2×, night-shift allowance, with the rule behind each line | Worker | Opaque pay calculations |
 | **Read-aloud payslip** and full **English / Tamil / Hindi** interface | Worker | Regional languages, limited literacy |
 | **Fatigue alerts:** weekly hours over the limit, too little rest between shifts, over-long shifts | Worker + manager | Overwork, unreported safety risk |
-| **Safety and issue reporting** with an **anonymous toggle**, a tracking code and status tracking (open → acknowledged → resolved) | Worker | Fear of identification, hazards ignored until injury |
-| **AI triage (Gemini):** turns any-language reports into a neutral English summary, sets severity, flags abusive wording | Manager | Delayed escalation; keeps anonymous feedback civil |
+| **Safety and issue reporting** with **speak-to-type** (Tamil/Hindi/English), an **anonymous toggle**, a tracking code saved only on the worker's phone, and status tracking (open → acknowledged → resolved) | Worker | Fear of identification, hazards ignored until injury |
+| **AI triage (Gemini):** turns any-language reports into a neutral English summary, sets severity by the problem (not the tone), flags abusive wording; managers can show the original words per report or always | Manager | Delayed escalation; keeps anonymous feedback civil |
 | **Workforce dashboard:** totals, a "needs attention" list, per-worker hours, overtime and pay | Manager | Zero workforce visibility |
 | **Explainable quit-risk score:** every score lists its reasons | Manager | High attrition risk |
 
