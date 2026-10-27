@@ -2,9 +2,9 @@
 
 Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge is in [docs/problem-statement.md](docs/problem-statement.md). Update this at every commit and every plan change.
 
-## Current state — Tue 27 Oct 2026, 11:07 IST (event day)
+## Current state — Tue 27 Oct 2026, 11:27 IST (event day)
 
-**Phase:** Plan proposed, awaiting approval. Google Cloud credits guide received (redeem via the trygcp.dev link in dashboard Quick Links / WhatsApp; link the "Google Cloud Platform Trial Billing Account").
+**Phase:** Plan approved. P1 core built and tested locally (35/35 tests pass; Gemini triage verified with a Tamil report). Waiting on Google Cloud project + `gcloud auth login` to deploy. **Final deadline: 1:00 pm** (confirmed).
 
 **Deadlines** (unconfirmed, need organizer answers)
 - "Something before 1 pm": Adwaith's notes say "problem statement submission is before 1pm". What exactly is due?
@@ -34,7 +34,7 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 - [ ] Find Antigravity's built-in agents (plan B)
 - [ ] Later: delete the Cloudflare test Worker `promptwars-deploytest` (no longer needed; it holds the key)
 
-**Proposed plan (11:07, awaiting approval)**
+**Approved plan (11:10)**
 - **Product:** a work portal. The worker side is mobile-first, read-mostly, one tap per shift. The admin side is desktop-first and configures the org. Two roles only (worker, admin); industry belongs to the organisation and sets presets (pay/overtime rules, fatigue limits, hazard categories, wording).
 - **Industries:** construction site + hospital (contrast: pay/overtime + site hazards vs rotating night shifts + fatigue).
 - **P1 (must, by ~12:05):** persona sign-in with signed-cookie sessions and server-side role checks · one-tap check-in/out → automatic hours, overtime and pay breakdown (payslip) · fatigue alerts · issue/safety reports with an anonymous toggle, anonymous tracking code and status tracking · admin dashboard · unit tests · Cloud Run deploy.
@@ -46,6 +46,11 @@ Current state + a short log. Rules live in [CLAUDE.md](CLAUDE.md). The challenge
 **Next step:** Adwaith approves the plan + model/effort → Claude installs gcloud and scaffolds; Adwaith redeems credits and creates the project in parallel.
 
 ## Log (newest first)
+
+### 27 Oct, 11:27: core built
+- Built the stack as planned: Express + helmet + rate limit, signed-cookie persona sessions, server-side role checks, pay/overtime/night allowance, fatigue alerts, explainable quit-risk score, anonymous reports (no identity, date only, tracking code), Gemini triage with fallback, worker UI (EN/TA/HI + read-aloud) and admin dashboard. 35 tests pass.
+- Organizers: deploy issues are allowed to fall back to other hosts; decision: stay on Cloud Run, fallback Render at 12:15 if Cloud Run isn't live.
+- `gcloud` installed (SDK 590). Docs added: docs/google-cloud-setup.md, future_additions.md.
 
 ### 27 Oct, 10:36: brief received
 - Challenge: FairShift (fair, safe, transparent work for large workforces; 3+ features, 2 UIs, 2+ industries; regional languages, low literacy, low-end phones). Saved to docs/problem-statement.md.
